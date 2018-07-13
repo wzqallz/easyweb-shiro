@@ -1,6 +1,5 @@
 package com.wf.ew.system.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.wf.captcha.utils.CaptchaUtil;
 import com.wf.ew.common.BaseController;
 import com.wf.ew.common.JsonResult;
@@ -37,9 +36,7 @@ public class MainController extends BaseController implements ErrorController {
     @RequestMapping({"/", "/index"})
     public String index(Model model) {
         List<Authorities> authorities = authoritiesService.listByUserId(getLoginUserId());
-        System.out.println(JSON.toJSONString(authorities));
         List<Map<String, Object>> menuTree = getMenuTree(authorities, "-1");
-        System.out.println(JSON.toJSONString(menuTree));
         model.addAttribute("menus", menuTree);
         model.addAttribute("login_user", getLoginUser());
         return "index.html";
