@@ -125,7 +125,7 @@ public class UserController extends BaseController {
             return JsonResult.error("演示系统关闭该功能");
         }
         String finalSecret = EndecryptUtil.encrytMd5(oldPsw, getLoginUserId(), 3);
-        if (finalSecret.equals(getLoginUser().getPassword())) {
+        if (!finalSecret.equals(getLoginUser().getPassword())) {
             return JsonResult.error("原密码输入不正确");
         }
         if (userService.updatePsw(getLoginUserId(), newPsw)) {

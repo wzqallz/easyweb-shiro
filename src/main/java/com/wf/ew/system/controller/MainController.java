@@ -66,7 +66,7 @@ public class MainController extends BaseController implements ErrorController {
             return JsonResult.error("账号密码不能为空");
         }
         CaptchaUtil captcha = new CaptchaUtil();
-        if (captcha == null || !captcha.ver(code, request)) {
+        if (captcha == null || !captcha.ver(code.toLowerCase(), request)) {
             return JsonResult.error("验证码不正确");
         }
         try {
