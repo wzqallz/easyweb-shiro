@@ -79,6 +79,20 @@ layui.define(['admin', 'layer', 'element', 'form'], function (exports) {
             } else {
                 $('.layui-layout-admin').removeClass('open-tab');
             }
+        },
+        // 打开新页面
+        openNewTab: function (param) {
+            var url = param.url;
+            var title = param.title;
+            var menuId = param.menuId;
+            if (!menuId) {
+                menuId = url.replace(new RegExp('/'), '_');
+            }
+            index.loadView(menuId, url, title);
+        },
+        // 关闭选项卡
+        closeTab: function (menuId) {
+            element.tabDelete('admin-pagetabs', menuId);
         }
     };
 
