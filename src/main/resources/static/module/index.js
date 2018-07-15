@@ -11,7 +11,7 @@ layui.define(['admin', 'layer', 'element', 'form'], function (exports) {
         initRouter: function () {
             // 自动扫描side菜单注册
             $('.layui-layout-admin .layui-side .layui-nav a').each(function () {
-                var url = $(this).attr('href');
+                var url = $(this).attr('lay-href');
                 var menuName = $(this).text();
                 if (url && 'javascript:;' != url) {
                     var key = url.replace(new RegExp('/'), '_');

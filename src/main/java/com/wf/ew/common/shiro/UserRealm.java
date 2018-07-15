@@ -1,5 +1,6 @@
 package com.wf.ew.common.shiro;
 
+import com.alibaba.fastjson.JSON;
 import com.wf.ew.system.model.Authorities;
 import com.wf.ew.system.model.User;
 import com.wf.ew.system.service.AuthoritiesService;
@@ -41,11 +42,12 @@ public class UserRealm extends AuthorizingRealm {
         }
         authorizationInfo.setRoles(roles);
         List<Authorities> authorities = authoritiesService.listByUserId(user.getUserId());
-        Set<String> menus = new HashSet<>();
+        Set<String> permissions = new HashSet<>();
         for (int i = 0; i < authorities.size(); i++) {
-            roles.add(authorities.get(i).getAuthority());
+            permissions.add(authorities.get(i).getAuthority());
         }
-        authorizationInfo.setStringPermissions(menus);
+        System.out.println(JSON.toJSONString(permissions));
+        authorizationInfo.setStringPermissions(permissions);
         return authorizationInfo;
     }
 
