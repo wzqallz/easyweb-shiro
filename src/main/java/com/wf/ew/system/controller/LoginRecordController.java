@@ -2,6 +2,7 @@ package com.wf.ew.system.controller;
 
 import com.wf.ew.common.PageResult;
 import com.wf.ew.common.utils.StringUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class LoginRecordController {
     @Autowired
     private LoginRecordService loginRecordService;
 
+    @RequiresPermissions("system:loginRecord")
     @RequestMapping()
     public String loginRecord() {
         return "system/login_record.html";
@@ -27,6 +29,7 @@ public class LoginRecordController {
     /**
      * 查询所有登录日志
      **/
+    @RequiresPermissions("system:loginRecord:list")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<LoginRecord> list(Integer page, Integer limit, String startDate, String endDate, String account) {

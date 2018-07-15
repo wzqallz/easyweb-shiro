@@ -1,5 +1,6 @@
 package com.wf.ew.system.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,6 +14,7 @@ public class HomeController {
     /**
      * 控制台
      */
+    @RequiresPermissions("home:console")
     @RequestMapping("/console")
     public String console() {
         return "console.html";

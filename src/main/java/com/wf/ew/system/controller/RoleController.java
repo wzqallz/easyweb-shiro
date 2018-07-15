@@ -4,6 +4,7 @@ import com.wf.ew.common.JsonResult;
 import com.wf.ew.common.PageResult;
 import com.wf.ew.system.model.Role;
 import com.wf.ew.system.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @RequiresPermissions("system:role")
     @RequestMapping()
     public String role() {
         return "system/role.html";
@@ -28,6 +30,7 @@ public class RoleController {
     /**
      * 查询所有角色
      **/
+    @RequiresPermissions("system:role:list")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<Role> list(String keyword) {
@@ -49,6 +52,7 @@ public class RoleController {
     /**
      * 添加角色
      **/
+    @RequiresPermissions("system:role:add")
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(Role role) {
@@ -62,6 +66,7 @@ public class RoleController {
     /**
      * 修改角色
      **/
+    @RequiresPermissions("system:role:update")
     @ResponseBody
     @RequestMapping("/update")
     public JsonResult update(Role role) {
@@ -75,6 +80,7 @@ public class RoleController {
     /**
      * 删除角色
      **/
+    @RequiresPermissions("system:role:delete")
     @ResponseBody
     @RequestMapping("/delete")
     public JsonResult delete(String roleId) {

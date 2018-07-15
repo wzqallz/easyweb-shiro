@@ -8,6 +8,7 @@ import com.wf.ew.system.model.Authorities;
 import com.wf.ew.system.model.Role;
 import com.wf.ew.system.service.AuthoritiesService;
 import com.wf.ew.system.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ public class AuthoritiesController extends BaseController {
     @Autowired
     private RoleService roleService;
 
+    @RequiresPermissions("system:authorities")
     @RequestMapping()
     public String authorities(Model model) {
         List<Role> roles = roleService.list(false);
@@ -38,6 +40,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 查询所有权限
      **/
+    @RequiresPermissions("system:authorities:list")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<Map<String, Object>> list(String roleId) {
@@ -61,6 +64,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 给角色添加权限
      **/
+    @RequiresPermissions("system:authorities:addRoleAuth")
     @ResponseBody
     @RequestMapping("/addRoleAuth")
     public JsonResult addRoleAuth(String roleId, String authId) {
@@ -73,6 +77,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 移除角色权限
      **/
+    @RequiresPermissions("system:authorities:deleteRoleAuth")
     @ResponseBody
     @RequestMapping("/deleteRoleAuth")
     public JsonResult deleteRoleAuth(String roleId, String authId) {
