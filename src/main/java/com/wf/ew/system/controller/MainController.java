@@ -4,8 +4,11 @@ import com.wf.captcha.utils.CaptchaUtil;
 import com.wf.ew.common.BaseController;
 import com.wf.ew.common.JsonResult;
 import com.wf.ew.common.utils.StringUtil;
+import com.wf.ew.common.utils.UserAgentGetter;
 import com.wf.ew.system.model.Authorities;
+import com.wf.ew.system.model.LoginRecord;
 import com.wf.ew.system.service.AuthoritiesService;
+import com.wf.ew.system.service.LoginRecordService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ import java.util.Map;
 public class MainController extends BaseController implements ErrorController {
     @Autowired
     private AuthoritiesService authoritiesService;
+    @Autowired
+    private LoginRecordService loginRecordService;
 
     /**
      * 主页
@@ -69,6 +74,7 @@ public class MainController extends BaseController implements ErrorController {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             SecurityUtils.getSubject().login(token);
+            addLoginRecord(getLoginUserId(), request);
             return JsonResult.ok("登录成功");
         } catch (IncorrectCredentialsException ice) {
             return JsonResult.error("密码错误");
@@ -128,4 +134,20 @@ public class MainController extends BaseController implements ErrorController {
         }
         return list;
     }
+
+    /**
+     * 添加登录日志
+     */
+    private void addLoginRecord(String userId, HttpServletRequest request) {
+        UserAgentGetter agentGetter = new UserAgentGetter(request);
+        // 添加到登录日志
+        LoginRecord loginRecord = new LoginRecord();
+        loginRecord.setUserId(userId);
+        loginRecord.setIpAddress(agentGetter.getIpAddr());
+        loginRecord.setDevice(agentGetter.getDevice());
+        loginRecord.setBrowserType(agentGetter.getBrowser());
+        loginRecord.setOsName(agentGetter.getOS());
+        loginRecordService.add(loginRecord);
+    }
+
 }
