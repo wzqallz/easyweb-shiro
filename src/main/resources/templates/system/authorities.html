@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>权限管理</title>
+    <% include("../layout/cssPart.html"){} %>
+    <% include("../layout/jsPart.html"){} %>
+</head>
+
+<body class="layui-fluid">
+
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">权限管理</h2>
@@ -29,6 +40,8 @@
 <script type="text/html" id="auth-state">
     <input type="checkbox" lay-filter="auth-state" value="{{d.authority}}" lay-skin="switch" lay-text="ON|OFF"
            {{d.checked==1?'checked':''}}/>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 <script>
@@ -41,17 +54,17 @@
         // 渲染表格
         table.render({
             elem: '#auth-table',
-            url: 'system/authorities/list',
+            url: 'authorities/list',
             page: false,
             cols: [[
                 {type: 'numbers'},
-                {field: 'authorityName', title: '权限'},
+                {field: 'authorityName', title: '权限名称'},
                 {field: 'authority', title: '权限标识'},
                 {field: 'menuUrl', title: '菜单url'},
                 {field: 'parentId', title: '上级菜单'},
                 {
                     field: 'isMenu', templet: function (d) {
-                        return d.isMenu == 0 ? '菜单' : '按钮';
+                        return d.isMenu == 0 ? '<span class="layui-badge layui-bg-gray">菜单</span>' : '<span class="layui-badge-rim">按钮</span>';
                     }, title: '类型'
                 },
                 {
@@ -59,7 +72,7 @@
                         return util.toDateString(d.createTime);
                     }, title: '创建时间'
                 },
-                {field: 'checked', templet: '#auth-state', title: '授权'}
+                {field: 'checked', templet: '#auth-state', title: '操作'}
             ]]
         });
 
@@ -87,7 +100,7 @@
                 return;
             }
             layer.load(2);
-            var url = 'system/authorities/' + (obj.elem.checked ? 'addRoleAuth' : 'deleteRoleAuth');
+            var url = 'authorities/' + (obj.elem.checked ? 'addRoleAuth' : 'deleteRoleAuth');
             $.post(url, {
                 roleId: roleId,
                 authId: obj.value
@@ -104,3 +117,6 @@
         });
     });
 </script>
+
+</body>
+</html>

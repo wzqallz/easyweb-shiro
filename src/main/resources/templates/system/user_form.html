@@ -54,11 +54,11 @@
 
         form.render('radio');
 
-        var url = 'system/user/add';
+        var url = 'user/add';
         // 回显user数据
         var user = admin.getTempData('t_user');
         if (user) {
-            url = 'system/user/update';
+            url = 'user/update';
             form.val('user-form', user);
             var rds = new Array();
             for (var i = 0; i < user.roles.length; i++) {

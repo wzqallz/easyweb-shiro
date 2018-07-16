@@ -2,26 +2,20 @@
 <html>
 
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta charset="utf-8"/>
     <title>EasyWeb</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="assets/libs/layui/css/layui.css"/>
-    <link rel="stylesheet" href="assets/css/admin.css"/>
-    <link rel="stylesheet" href="module/formSelects/formSelects-v4.css"/>
-    <!--<link rel="stylesheet" href="assets/css/theme-blue.css"/>--> <!-- 自定义主题，使用EasyWeb主题生成器生成 -->
+    <% include("./layout/cssPart.html"){} %>
 </head>
 
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <!-- 头部 -->
     <div class="layui-header">
-        <% include("./tpl/header.html"){} %>
+        <% include("./layout/header.html"){} %>
     </div>
 
     <!-- 侧边栏 -->
     <div class="layui-side">
-        <% include("./tpl/side.html"){} %>
+        <% include("./layout/side.html"){} %>
     </div>
 
     <!-- 主体部分 -->
@@ -56,15 +50,11 @@
     <div class="site-mobile-shade"></div>
 </div>
 
-<script type="text/javascript" src="assets/libs/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="assets/libs/q.js"></script>
-<script type="text/javascript" src="assets/libs/layui/layui.js"></script>
+<% include("./layout/jsPart.html"){} %>
 
 <script>
     layui.config({
         base: 'module/'
-    }).extend({
-        formSelects: 'formSelects/formSelects-v4'
     }).use(['index'], function () {
         var index = layui.index;
 

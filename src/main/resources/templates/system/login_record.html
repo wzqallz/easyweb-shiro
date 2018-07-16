@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>登录日志</title>
+    <% include("../layout/cssPart.html"){} %>
+    <% include("../layout/jsPart.html"){} %>
+</head>
+
+<body class="layui-fluid">
+
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">登录日志</h2>
@@ -29,7 +40,7 @@
         // 渲染表格
         table.render({
             elem: '#logr-table',
-            url: 'system/loginRecord/list',
+            url: 'loginRecord/list',
             page: true,
             cols: [[
                 {type: 'numbers'},
@@ -69,3 +80,5 @@
         });
     });
 </script>
+</body>
+</html>

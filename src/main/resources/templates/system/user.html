@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>用户管理</title>
+    <% include("../layout/cssPart.html"){} %>
+    <% include("../layout/jsPart.html"){} %>
+</head>
+
+<body class="layui-fluid">
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">用户管理</h2>
@@ -38,17 +48,22 @@
 </script>
 
 <script>
-    layui.use(['form', 'table', 'util', 'admin'], function () {
+    layui.config({
+        base: '../module/'
+    }).extend({
+        formSelects: 'formSelects/formSelects-v4'
+    }).use(['form', 'table', 'util', 'admin', 'element'], function () {
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;
         var util = layui.util;
         var admin = layui.admin;
+        var element = layui.element;
 
         // 渲染表格
         table.render({
             elem: '#user-table',
-            url: 'system/user/list',
+            url: 'user/list',
             page: true,
             cols: [[
                 {type: 'numbers'},
@@ -83,7 +98,7 @@
                 layer.confirm('确定重置此用户的密码吗？', function (i) {
                     layer.close(i);
                     layer.load(2);
-                    $.post('system/user/restPsw', {
+                    $.post('user/restPsw', {
                         userId: obj.data.userId
                     }, function (data) {
                         layer.closeAll('loading');
@@ -103,7 +118,7 @@
             var title = data ? '修改用户' : '添加用户';
             admin.popupCenter({
                 title: title,
-                path: 'system/user/addView',
+                path: 'user/addView',
                 finish: function () {
                     table.reload('user-table', {});
                 }
@@ -120,7 +135,7 @@
         // 修改user状态
         form.on('switch(user-tpl-state)', function (obj) {
             layer.load(2);
-            $.post('system/user/updateState', {
+            $.post('user/updateState', {
                 userId: obj.elem.value,
                 state: obj.elem.checked ? 0 : 1
             }, function (data) {
@@ -137,3 +152,5 @@
         });
     });
 </script>
+</body>
+</html>

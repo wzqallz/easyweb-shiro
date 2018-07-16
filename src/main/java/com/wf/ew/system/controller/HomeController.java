@@ -17,7 +17,7 @@ public class HomeController {
     @RequiresPermissions("home:console")
     @RequestMapping("/console")
     public String console() {
-        return "console.html";
+        return "home/console.html";
     }
 
     /**

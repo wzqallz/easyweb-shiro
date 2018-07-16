@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>角色管理</title>
+    <% include("../layout/cssPart.html"){} %>
+    <% include("../layout/jsPart.html"){} %>
+</head>
+
+<body class="layui-fluid">
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">角色管理</h2>
@@ -49,7 +59,7 @@
 </script>
 
 <script>
-    layui.use(['form', 'table', 'util', 'admin'], function () {
+    layui.use(['form', 'table', 'util'], function () {
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;
@@ -60,7 +70,7 @@
         //渲染表格
         table.render({
             elem: '#role-table',
-            url: 'system/role/list',
+            url: 'role/list',
             page: false,
             cols: [[
                 {type: 'numbers'},
@@ -105,7 +115,7 @@
             } else if (obj.event === 'del') { //删除
                 layer.confirm('确定要删除吗？', function () {
                     layer.load(2);
-                    $.post('system/role/delete', {
+                    $.post('role/delete', {
                         roleId: obj.data.roleId
                     }, function (data) {
                         layer.closeAll('loading');
@@ -136,9 +146,9 @@
                 content: $('#role-model').html(),
                 success: function () {
                     $('#role-form')[0].reset();
-                    formUrl = 'system/role/add';
+                    formUrl = 'role/add';
                     if (data) {
-                        formUrl = 'system/role/update';
+                        formUrl = 'role/update';
                         form.val('role-form', data);
                     }
                     $('#role-form .close').click(function () {
@@ -151,3 +161,6 @@
     });
 
 </script>
+
+</body>
+</html>

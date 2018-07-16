@@ -21,7 +21,7 @@ layui.define(['layer'], function (exports) {
             $('.layui-layout-admin .layui-side .layui-nav .layui-nav-item .layui-nav-child dd').removeClass('layui-this');
             if (url && url != '') {
                 $('.layui-layout-admin .layui-side .layui-nav .layui-nav-item').removeClass('layui-nav-itemed');
-                var $a = $('.layui-layout-admin .layui-side .layui-nav>.layui-nav-item>.layui-nav-child>dd>a[href="#!' + url + '"]');
+                var $a = $('.layui-layout-admin .layui-side .layui-nav a[lay-href="' + url + '"]');
                 $a.parent('dd').addClass('layui-this');
                 $a.parent('dd').parent('.layui-nav-child').parent('.layui-nav-item').addClass('layui-nav-itemed');
             }
