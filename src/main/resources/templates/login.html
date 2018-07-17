@@ -26,7 +26,7 @@
             <div class="layui-card-header">
                 <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp;用户登录
             </div>
-            <div class="layui-card-body layui-form layui-form-pane">
+            <form class="layui-card-body layui-form layui-form-pane">
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
                     <div class="layui-input-block">
@@ -68,7 +68,7 @@
                     <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
                     <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -103,6 +103,7 @@
                     layer.msg(data.msg, {icon: 5});
                 }
             }, 'JSON');
+            return false;
         });
 
         // 图形验证码

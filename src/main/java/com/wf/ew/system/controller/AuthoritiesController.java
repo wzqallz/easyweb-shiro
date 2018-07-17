@@ -37,6 +37,13 @@ public class AuthoritiesController extends BaseController {
         return "system/authorities.html";
     }
 
+    @RequestMapping("editForm")
+    public String editForm(Model model) {
+        List<Authorities> authorities = authoritiesService.list();
+        model.addAttribute("authorities", authorities);
+        return "system/authorities_form.html";
+    }
+
     /**
      * 查询所有权限
      **/
@@ -59,6 +66,33 @@ public class AuthoritiesController extends BaseController {
             maps.add(map);
         }
         return new PageResult<>(maps);
+    }
+
+    @ResponseBody
+    @RequestMapping("/add")
+    public JsonResult add(Authorities authorities) {
+        if (authoritiesService.add(authorities)) {
+            return JsonResult.ok("添加成功");
+        }
+        return JsonResult.ok("添加失败");
+    }
+
+    @ResponseBody
+    @RequestMapping("/update")
+    public JsonResult update(Authorities authorities) {
+        if (authoritiesService.update(authorities)) {
+            return JsonResult.ok("修改成功");
+        }
+        return JsonResult.ok("修改失败");
+    }
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    public JsonResult delete(String authority) {
+        if (authoritiesService.delete(authority)) {
+            return JsonResult.ok("删除成功");
+        }
+        return JsonResult.ok("删除失败");
     }
 
     /**

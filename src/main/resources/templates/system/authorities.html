@@ -15,16 +15,7 @@
     </div>
     <div class="layui-card-body">
         <div class="layui-form toolbar">
-            查看角色权限：
-            <select id="auth-slt-role" lay-filter="auth-slt-role">
-                <option value="">-请选择角色-</option>
-                <% for(role in roles) { %>
-                <option value="${role.roleId}">${role.roleName}</option>
-                <% } %>
-            </select>&emsp;
-            <button id="auth-btn-sync" class="layui-btn icon-btn" lay-tips="自动扫描所有接口同步到数据库">
-                <i class="layui-icon">&#xe669;</i>同步
-            </button>
+            <button id="auth-btn-add" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
         </div>
 
         <!-- 数据表格 -->
@@ -32,20 +23,19 @@
     </div>
 </div>
 
-<!-- 表格状态列 -->
+<!-- 表格操作列 -->
 <script type="text/html" id="auth-state">
-    <input type="checkbox" lay-filter="auth-state" value="{{d.authority}}" lay-skin="switch" lay-text="ON|OFF"
-           {{d.checked==1?'checked':''}}/>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 <script>
-    layui.use(['form', 'table', 'util'], function () {
+    layui.use(['form', 'table', 'util','admin'], function () {
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;
         var util = layui.util;
+        var admin = layui.admin;
 
         // 渲染表格
         table.render({
@@ -72,45 +62,48 @@
             ]]
         });
 
-        // 角色切换事件
-        form.on('select(auth-slt-role)', function (data) {
-            table.reload('auth-table', {where: {roleId: data.value}});
+        // 工具条点击事件
+        table.on('tool(auth-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (layEvent === 'delete') { // 重置密码
+                layer.confirm('确定删除此菜单吗？', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    $.post('user/restPsw', {
+                        userId: obj.data.userId
+                    }, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    });
+                });
+            }
         });
 
         // 同步按钮点击事件
-        $('#auth-btn-sync').click(function () {
-            layer.confirm('确定进行同步？', {
-                btn: ['确定', '取消'] //按钮
-            }, function () {
-                layer.msg('功能改造中..', {icon: 2});
-            });
+        $('#auth-btn-add').click(function () {
+            showEditModel();
         });
 
-        // 监听状态开关操作
-        form.on('switch(auth-state)', function (obj) {
-            var roleId = $('#auth-slt-role').val();
-            if (!roleId) {
-                layer.msg('请选择角色再进行授权操作', {icon: 2});
-                $(obj.elem).prop('checked', !obj.elem.checked);
-                form.render('checkbox');
-                return;
-            }
-            layer.load(2);
-            var url = 'authorities/' + (obj.elem.checked ? 'addRoleAuth' : 'deleteRoleAuth');
-            $.post(url, {
-                roleId: roleId,
-                authId: obj.value
-            }, function (data) {
-                layer.closeAll('loading');
-                if (data.code == 200) {
-                    layer.msg(data.msg, {icon: 1});
-                } else {
-                    layer.msg(data.msg, {icon: 2});
-                    $(obj.elem).prop('checked', !obj.elem.checked);
-                    form.render('checkbox');
+        // 显示表单弹窗
+        var showEditModel = function (data) {
+            var title = data ? '修改菜单' : '添加菜单';
+            admin.putTempData('t_authoritie', data);
+            admin.popupCenter({
+                title: title,
+                path: 'authorities/editForm',
+                finish: function () {
+                    table.reload('auth-table', {});
                 }
             });
-        });
+        };
     });
 </script>
 

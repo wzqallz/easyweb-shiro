@@ -16,6 +16,10 @@ public interface AuthoritiesService {
 
     boolean add(Authorities authorities);
 
+    boolean update(Authorities authorities);
+
+    boolean delete(String authority);
+
     boolean add(List<Authorities> authorities);
 
     boolean addRoleAuth(String roleId, String authId);

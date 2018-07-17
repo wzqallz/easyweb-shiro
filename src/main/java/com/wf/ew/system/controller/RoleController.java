@@ -4,9 +4,11 @@ import com.wf.ew.common.JsonResult;
 import com.wf.ew.common.PageResult;
 import com.wf.ew.system.model.Role;
 import com.wf.ew.system.service.RoleService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Iterator;
@@ -25,6 +27,12 @@ public class RoleController {
     @RequestMapping()
     public String role() {
         return "system/role.html";
+    }
+
+    @RequestMapping("/auth")
+    public String roleAuth(String roleId, Model model) {
+        model.addAttribute("roleId", roleId);
+        return "system/role_auth.html";
     }
 
     /**
@@ -52,7 +60,7 @@ public class RoleController {
     /**
      * 添加角色
      **/
-    @RequiresPermissions("system:role:add")
+    @RequiresPermissions("systemroleadd")
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(Role role) {

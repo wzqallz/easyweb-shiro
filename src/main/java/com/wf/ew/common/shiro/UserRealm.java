@@ -46,7 +46,7 @@ public class UserRealm extends AuthorizingRealm {
         for (int i = 0; i < authorities.size(); i++) {
             permissions.add(authorities.get(i).getAuthority());
         }
-        System.out.println(JSON.toJSONString(permissions));
+        System.out.printf(JSON.toJSONString(permissions));
         authorizationInfo.setStringPermissions(permissions);
         return authorizationInfo;
     }

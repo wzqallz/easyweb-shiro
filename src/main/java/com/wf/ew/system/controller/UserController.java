@@ -31,11 +31,13 @@ public class UserController extends BaseController {
 
     @RequiresPermissions("system:user")
     @RequestMapping
-    public String user() {
+    public String user(Model model) {
+        List<Role> roles = roleService.list(false);
+        model.addAttribute("roles", roles);
         return "system/user.html";
     }
 
-    @RequestMapping("/addView")
+    @RequestMapping("/editForm")
     public String addUser(Model model) {
         List<Role> roles = roleService.list(false);
         model.addAttribute("roles", roles);

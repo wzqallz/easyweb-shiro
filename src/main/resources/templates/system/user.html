@@ -104,13 +104,13 @@
             }
         });
 
-        //显示表单弹窗
+        // 显示表单弹窗
         var showEditModel = function (data) {
-            admin.putTempData('t_user', data);
             var title = data ? '修改用户' : '添加用户';
+            admin.putTempData('t_user', data);
             admin.popupCenter({
                 title: title,
-                path: 'user/addView',
+                path: 'user/editForm',
                 finish: function () {
                     table.reload('user-table', {});
                 }

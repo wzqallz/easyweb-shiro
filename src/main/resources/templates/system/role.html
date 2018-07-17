@@ -52,6 +52,7 @@
 <script type="text/html" id="role-table-bar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="auth">权限管理</a>
 </script>
 
 <script>
@@ -122,6 +123,14 @@
                             layer.msg(data.msg, {icon: 2});
                         }
                     });
+                });
+            }else if(obj.event === 'auth'){  // 权限管理
+                top.layer.open({
+                    type: 2,
+                    title: '权限管理',
+                    area: ['580px', '400px'],
+                    offset: '120px',
+                    content: 'system/role/auth?roleId='+obj.data.roleId
                 });
             }
         });

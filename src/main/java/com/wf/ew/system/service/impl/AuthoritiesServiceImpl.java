@@ -55,6 +55,16 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     }
 
     @Override
+    public boolean update(Authorities authorities) {
+        return authoritiesMapper.updateById(authorities) > 0;
+    }
+
+    @Override
+    public boolean delete(String authority) {
+        return authoritiesMapper.deleteById(authority)>0;
+    }
+
+    @Override
     public boolean add(List<Authorities> authorities) {
         authoritiesMapper.delete(null);
         for (Authorities one : authorities) {

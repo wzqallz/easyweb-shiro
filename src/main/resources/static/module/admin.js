@@ -206,6 +206,13 @@ layui.define(['layer'], function (exports) {
         // 关闭所有选项卡
         closeAllTabs: function () {
             $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title li:gt(0)').find('.layui-tab-close').trigger('click');
+        },
+        // 关闭所有弹窗
+        closeDialog: function () {
+            layer.closeAll('page');
+            //当在iframe页面关闭自身时
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
         }
     };
 
