@@ -24,6 +24,7 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
                 var layId = $(this).attr('lay-id');
                 admin.activeNav(layId);
                 admin.rollPage('auto');
+                // 解决切换tab滚动条时而消失的问题
                 var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show .admin-iframe')[0];
                 if ($iframe) {
                     $iframe.style.height = "99%";

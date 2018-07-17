@@ -201,11 +201,11 @@ layui.define(['layer'], function (exports) {
         },
         // 关闭其他选项卡
         closeOtherTabs: function () {
-            $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title li:gt(0):not(.layui-this)').find(".layui-tab-close").trigger("click");
+            $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title li:gt(0):not(.layui-this)').find('.layui-tab-close').trigger('click');
         },
         // 关闭所有选项卡
         closeAllTabs: function () {
-            $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title li:gt(0)').find(".layui-tab-close").trigger("click");
+            $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title li:gt(0)').find('.layui-tab-close').trigger('click');
         }
     };
 
