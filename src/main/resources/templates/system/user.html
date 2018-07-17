@@ -48,11 +48,7 @@
 </script>
 
 <script>
-    layui.config({
-        base: '../module/'
-    }).extend({
-        formSelects: 'formSelects/formSelects-v4'
-    }).use(['form', 'table', 'util', 'admin', 'element'], function () {
+    layui.use(['form', 'table', 'util', 'admin', 'element'], function () {
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;

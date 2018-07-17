@@ -1,8 +1,11 @@
 package com.wf.ew.system.controller;
 
+import com.wf.ew.common.JsonResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Administrator on 2018-07-13 上午 11:21.
@@ -14,7 +17,6 @@ public class HomeController {
     /**
      * 控制台
      */
-    @RequiresPermissions("home:console")
     @RequestMapping("/console")
     public String console() {
         return "home/console.html";
@@ -42,5 +44,18 @@ public class HomeController {
     @RequestMapping("/theme")
     public String theme() {
         return "tpl/theme.html";
+    }
+
+    /**
+     * 设置主题
+     */
+    @RequestMapping("/setTheme")
+    public String setTheme(String themeName, HttpServletRequest request) {
+        if (null == themeName) {
+            request.getSession().removeAttribute("theme");
+        } else {
+            request.getSession().setAttribute("theme", themeName);
+        }
+        return "redirect:/";
     }
 }

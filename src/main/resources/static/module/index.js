@@ -5,7 +5,7 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
 
     var index = {
         pageTabs: true,  // 是否开启多标签
-        // 路由注册
+        // 导航栏和tab联动
         initRouter: function () {
             // 导航点击事件
             $('.layui-layout-admin .layui-side .layui-nav a[lay-href]').click(function () {
@@ -23,12 +23,19 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
             element.on('tab(admin-pagetabs)', function (data) {
                 var layId = $(this).attr('lay-id');
                 admin.activeNav(layId);
+                admin.rollPage('auto');
+                var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show .admin-iframe')[0];
+                if ($iframe) {
+                    $iframe.style.height = "99%";
+                    $iframe.scrollWidth;
+                    $iframe.style.height = "100%";
+                }
             });
         },
-        // 路由加载组件
+        // 加载主体部分
         loadView: function (menuPath, menuName) {
             var flag;  // 选项卡是否已添加
-            var contentBody = '<iframe src="' + menuPath + '" frameborder="0" class="admin-iframe" scrolling="yes"></iframe>';
+            var contentBody = '<iframe src="' + menuPath + '" frameborder="0" class="admin-iframe"></iframe>';
             // 判断是否开启了选项卡功能
             if (index.pageTabs) {
                 $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title>li').each(function () {
@@ -52,9 +59,9 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
                 $('.layui-layout-admin').addClass('open-tab');
             } else {
                 $('.layui-layout-admin').removeClass('open-tab');
+                var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show');
+                $('.layui-layout-admin .layui-body').html($iframe.html());
             }
-            index.loadView('home/console', '<i class="layui-icon layui-icon-home"></i>');
-            admin.activeNav('home/console');
         },
         // 打开新页面
         openNewTab: function (param) {
@@ -92,6 +99,5 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
         }
     };
 
-    index.bindEvent();
     exports('index', index);
 });

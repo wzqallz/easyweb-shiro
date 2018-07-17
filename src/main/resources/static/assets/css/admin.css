@@ -148,9 +148,9 @@ html {
 .layui-layout-admin .layui-body {
     left: 220px;
     top: 50px;
-    padding: 15px;
     transition: left .3s;
-    overflow-y: scroll;
+    overflow: hidden;
+    padding: 0;
 }
 
 /** //主体部分样式结束 */
@@ -529,24 +529,13 @@ html {
     box-shadow: 0 1px 1px 0 rgba(0, 21, 41, .05);
 }
 
-/** 开启选项卡让去除body的内边距 */
-.layui-layout-admin.open-tab .layui-body {
-    padding: 0;
-    overflow-y: hidden;
-}
-
-.layui-layout-admin.open-tab .layui-body .layui-tab {
-    visibility: visible; /** 开启选项卡才让tab可见 */
-}
-
 .layui-layout-admin .layui-body .layui-tab {
     margin: 0;
     overflow: hidden;
-    visibility: hidden; /** 默认隐藏tab */
 }
 
 /** 开启选项卡后让tab-content样式为以前的layui-body样式 */
-.layui-layout-admin .layui-body .layui-tab .layui-tab-content {
+.layui-layout-admin .layui-body .layui-tab .layui-tab-content .layui-tab-item {
     position: absolute;
     bottom: 0;
     overflow: hidden;
@@ -570,9 +559,10 @@ html {
     overflow: hidden;
 }
 
+/*
 .layui-layout-admin .layui-body .layui-tab .layui-tab-title::-webkit-scrollbar {
     display: none;
-}
+}*/
 
 .layui-layout-admin .layui-body .layui-tab .layui-tab-title li {
     min-width: 0;
@@ -690,16 +680,16 @@ html {
     display: none;
 }
 
+/** iframe样式 */
 .admin-iframe {
-    position: absolute;
     width: 100%;
     height: 100%;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
 }
 
 .layui-fluid {
     padding: 15px;
+}
+
+body.layui-fluid {
+    overflow-y: scroll;
 }

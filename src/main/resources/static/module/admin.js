@@ -3,7 +3,6 @@ layui.define(['layer'], function (exports) {
     var popupRightIndex, popupCenterIndex, popupCenterParam;
 
     var admin = {
-        isRefresh: false,
         // 设置侧栏折叠
         flexible: function (expand) {
             var isExapnd = $('.layui-layout-admin').hasClass('admin-nav-mini');
@@ -133,8 +132,13 @@ layui.define(['layer'], function (exports) {
             }
         },
         refresh: function () {
-            admin.isRefresh = true;
-            Q.refresh();
+            var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show .admin-iframe');
+            if (!$iframe) {
+                $iframe = $('.layui-layout-admin .layui-body>.admin-iframe');
+            }
+            if ($iframe) {
+                $iframe[0].contentWindow.location.reload(true);
+            }
         }
     };
 

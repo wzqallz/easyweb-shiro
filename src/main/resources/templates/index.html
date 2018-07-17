@@ -22,8 +22,12 @@
     <div class="layui-body">
         <div class="layui-tab" lay-allowClose="true" lay-filter="admin-pagetabs">
             <ul class="layui-tab-title">
+                <li lay-id="home/console" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
             </ul>
             <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <iframe src="home/console" frameborder="0" class="admin-iframe"></iframe>
+                </div>
             </div>
         </div>
         <div class="layui-icon admin-tabs-control layui-icon-prev" ew-event="leftPage"></div>
@@ -53,15 +57,12 @@
 <% include("./layout/jsPart.html"){} %>
 
 <script>
-    layui.config({
-        base: 'module/'
-    }).use(['index'], function () {
+    layui.use(['index'], function () {
         var index = layui.index;
 
-        // 检查多标签功能
-        index.checkPageTabs(true);
-        // 注册路由
-        index.initRouter();
+        index.checkPageTabs(true);  // 检查多标签是否开启
+        index.initRouter();  // 导航栏和tab联动
+        index.bindEvent();  // 绑定事件
 
     });
 </script>
