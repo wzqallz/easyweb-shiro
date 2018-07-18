@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,6 +26,10 @@ public class ShiroConfig {
         shiroFilter.setLoginUrl("/login");
         shiroFilter.setSuccessUrl("/");
         shiroFilter.setUnauthorizedUrl("/error?code=403");
+        // 自定义过滤器
+        Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
+        filtersMap.put("myLoginFilter", new MyLoginFilter());
+        shiroFilter.setFilters(filtersMap);
         // 拦截配置
         Map<String, String> filterChainDefinitions = new LinkedHashMap<>();
         filterChainDefinitions.put("/assets/**", "anon");
@@ -33,7 +38,7 @@ public class ShiroConfig {
         filterChainDefinitions.put("/druid/**", "anon");
         filterChainDefinitions.put("/login", "anon");
         filterChainDefinitions.put("/logout", "logout");
-        filterChainDefinitions.put("/**", "authc");
+        filterChainDefinitions.put("/**", "myLoginFilter,authc");
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitions);
         return shiroFilter;
     }

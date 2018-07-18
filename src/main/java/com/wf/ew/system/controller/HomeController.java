@@ -1,7 +1,5 @@
 package com.wf.ew.system.controller;
 
-import com.wf.ew.common.JsonResult;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 

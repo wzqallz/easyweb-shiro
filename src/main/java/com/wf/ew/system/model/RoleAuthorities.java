@@ -12,7 +12,7 @@ public class RoleAuthorities {
 
     private String roleId;
 
-    private String authority;
+    private String authorityId;
 
     private Date createTime;
 
@@ -32,12 +32,12 @@ public class RoleAuthorities {
         this.roleId = roleId == null ? null : roleId.trim();
     }
 
-    public String getAuthority() {
-        return authority;
+    public String getAuthorityId() {
+        return authorityId;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    public void setAuthorityId(String authorityId) {
+        this.authorityId = authorityId;
     }
 
     public Date getCreateTime() {

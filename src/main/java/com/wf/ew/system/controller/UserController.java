@@ -29,7 +29,7 @@ public class UserController extends BaseController {
     @Autowired
     private RoleService roleService;
 
-    @RequiresPermissions("system:user")
+    @RequiresPermissions("system/user")
     @RequestMapping
     public String user(Model model) {
         List<Role> roles = roleService.list(false);
@@ -47,7 +47,7 @@ public class UserController extends BaseController {
     /**
      * 查询用户列表
      */
-    @RequiresPermissions("system:user:list")
+    @RequiresPermissions("system/user/list")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<User> list(Integer page, Integer limit, String searchKey, String searchValue) {
@@ -64,7 +64,7 @@ public class UserController extends BaseController {
     /**
      * 添加用户
      **/
-    @RequiresPermissions("system:user:add")
+    @RequiresPermissions("system/user/add")
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(User user, String roleId) {
@@ -87,13 +87,10 @@ public class UserController extends BaseController {
     /**
      * 修改用户
      **/
-    @RequiresPermissions("system:user:update")
+    @RequiresPermissions("system/user/update")
     @ResponseBody
     @RequestMapping("/update")
     public JsonResult update(User user, String roleId) {
-        if ("admin".equals(user.getUserId())) {
-            return JsonResult.error("演示系统不能操作admin");
-        }
         List<Role> roleIds = new ArrayList<>();
         String[] split = roleId.split(",");
         for (String t : split) {
@@ -112,7 +109,7 @@ public class UserController extends BaseController {
     /**
      * 修改用户状态
      **/
-    @RequiresPermissions("system:user:updateState")
+    @RequiresPermissions("system/user/updateState")
     @ResponseBody
     @RequestMapping("/updateState")
     public JsonResult updateState(String userId, Integer state) {
@@ -126,12 +123,11 @@ public class UserController extends BaseController {
     /**
      * 修改自己密码
      **/
-    @RequiresPermissions("system:user:updatePsw")
     @ResponseBody
     @RequestMapping("/updatePsw")
     public JsonResult updatePsw(String oldPsw, String newPsw) {
-        if (false) {
-            return JsonResult.error("演示系统关闭该功能");
+        if ("admin".equals(getLoginUserId())) {
+            return JsonResult.error("演示账号关闭该功能");
         }
         String finalSecret = EndecryptUtil.encrytMd5(oldPsw, getLoginUserId(), 3);
         if (!finalSecret.equals(getLoginUser().getPassword())) {
@@ -147,7 +143,7 @@ public class UserController extends BaseController {
     /**
      * 重置密码
      **/
-    @RequiresPermissions("system:user:restPsw")
+    @RequiresPermissions("system/user/restPsw")
     @ResponseBody
     @RequestMapping("/restPsw")
     public JsonResult resetPsw(String userId) {

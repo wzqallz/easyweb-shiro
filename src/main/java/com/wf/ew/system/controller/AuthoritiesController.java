@@ -29,7 +29,7 @@ public class AuthoritiesController extends BaseController {
     @Autowired
     private RoleService roleService;
 
-    @RequiresPermissions("system:authorities")
+    @RequiresPermissions("system/authorities")
     @RequestMapping()
     public String authorities(Model model) {
         List<Role> roles = roleService.list(false);
@@ -47,7 +47,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 查询所有权限
      **/
-    @RequiresPermissions("system:authorities:list")
+    @RequiresPermissions("system/authorities/list")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<Map<String, Object>> list(String roleId) {
@@ -58,7 +58,7 @@ public class AuthoritiesController extends BaseController {
             Map<String, Object> map = ReflectUtil.objectToMap(one);
             map.put("checked", 0);
             for (String roleAuth : roleAuths) {
-                if (one.getAuthority().equals(roleAuth)) {
+                if (one.getAuthorityId().equals(roleAuth)) {
                     map.put("checked", 1);
                     break;
                 }
@@ -68,6 +68,10 @@ public class AuthoritiesController extends BaseController {
         return new PageResult<>(maps);
     }
 
+    /**
+     * 添加权限
+     */
+    @RequiresPermissions("system/authorities/add")
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(Authorities authorities) {
@@ -77,6 +81,10 @@ public class AuthoritiesController extends BaseController {
         return JsonResult.ok("添加失败");
     }
 
+    /**
+     * 修改权限
+     */
+    @RequiresPermissions("system/authorities/update")
     @ResponseBody
     @RequestMapping("/update")
     public JsonResult update(Authorities authorities) {
@@ -86,10 +94,14 @@ public class AuthoritiesController extends BaseController {
         return JsonResult.ok("修改失败");
     }
 
+    /**
+     * 删除权限
+     */
+    @RequiresPermissions("system/authorities/delete")
     @ResponseBody
     @RequestMapping("/delete")
-    public JsonResult delete(String authority) {
-        if (authoritiesService.delete(authority)) {
+    public JsonResult delete(String authorityId) {
+        if (authoritiesService.delete(authorityId)) {
             return JsonResult.ok("删除成功");
         }
         return JsonResult.ok("删除失败");
@@ -98,7 +110,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 给角色添加权限
      **/
-    @RequiresPermissions("system:authorities:addRoleAuth")
+    @RequiresPermissions("system/authorities/addRoleAuth")
     @ResponseBody
     @RequestMapping("/addRoleAuth")
     public JsonResult addRoleAuth(String roleId, String authId) {
@@ -111,7 +123,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 移除角色权限
      **/
-    @RequiresPermissions("system:authorities:deleteRoleAuth")
+    @RequiresPermissions("system/authorities/deleteRoleAuth")
     @ResponseBody
     @RequestMapping("/deleteRoleAuth")
     public JsonResult deleteRoleAuth(String roleId, String authId) {

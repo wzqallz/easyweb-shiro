@@ -206,7 +206,6 @@ public class ShiroExt {
     }
 
     protected static Subject getSubject() {
-        System.out.println(JSON.toJSONString(SecurityUtils.getSubject().getPrincipal()));
         return SecurityUtils.getSubject();
     }
 

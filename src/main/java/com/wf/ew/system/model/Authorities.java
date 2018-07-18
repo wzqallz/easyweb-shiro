@@ -8,11 +8,11 @@ import java.util.Date;
 @TableName("sys_authorities")
 public class Authorities {
     @TableId
-    private String authority;
+    private String authorityId;
 
     private String authorityName;
 
-    private String menuUrl;
+    private String authority;
 
     private String parentId;
 
@@ -42,12 +42,12 @@ public class Authorities {
         this.authorityName = authorityName;
     }
 
-    public String getMenuUrl() {
-        return menuUrl;
+    public String getAuthorityId() {
+        return authorityId;
     }
 
-    public void setMenuUrl(String menuUrl) {
-        this.menuUrl = menuUrl;
+    public void setAuthorityId(String authorityId) {
+        this.authorityId = authorityId;
     }
 
     public String getParentId() {

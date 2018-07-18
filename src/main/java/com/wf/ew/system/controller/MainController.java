@@ -101,6 +101,15 @@ public class MainController extends BaseController implements ErrorController {
     }
 
     /**
+     * iframe页
+     */
+    @RequestMapping("/iframe")
+    public String error(String url, Model model) {
+        model.addAttribute("url", url);
+        return "tpl/iframe.html";
+    }
+
+    /**
      * 错误页
      */
     @RequestMapping("/error")
@@ -127,8 +136,8 @@ public class MainController extends BaseController implements ErrorController {
                 Map<String, Object> map = new HashMap<>();
                 map.put("menuName", temp.getAuthorityName());
                 map.put("menuIcon", temp.getMenuIcon());
-                map.put("menuUrl", StringUtil.isBlank(temp.getMenuUrl()) ? "javascript:;" : temp.getMenuUrl());
-                map.put("subMenus", getMenuTree(authorities, authorities.get(i).getAuthority()));
+                map.put("menuUrl", StringUtil.isBlank(temp.getAuthority()) ? "javascript:;" : temp.getAuthority());
+                map.put("subMenus", getMenuTree(authorities, authorities.get(i).getAuthorityId()));
                 list.add(map);
             }
         }
