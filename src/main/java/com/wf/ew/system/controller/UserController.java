@@ -68,6 +68,9 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(User user, String roleId) {
+        if (roleId.contains("SJ1UzsU9")) {
+            return JsonResult.error("不能添加超级管理员");
+        }
         List<Role> roleIds = new ArrayList<>();
         String[] split = roleId.split(",");
         for (String t : split) {
@@ -91,6 +94,9 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("/update")
     public JsonResult update(User user, String roleId) {
+        if (roleId.contains("SJ1UzsU9")) {
+            return JsonResult.error("不能添加超级管理员");
+        }
         List<Role> roleIds = new ArrayList<>();
         String[] split = roleId.split(",");
         for (String t : split) {
