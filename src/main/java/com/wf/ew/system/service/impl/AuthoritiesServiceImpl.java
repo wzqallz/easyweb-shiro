@@ -61,7 +61,8 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
 
     @Override
     public boolean delete(String authority) {
-        return authoritiesMapper.deleteById(authority)>0;
+        roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("authority", authority));
+        return authoritiesMapper.deleteById(authority) > 0;
     }
 
     @Override

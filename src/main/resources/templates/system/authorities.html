@@ -30,7 +30,7 @@
 </script>
 
 <script>
-    layui.use(['form', 'table', 'util','admin'], function () {
+    layui.use(['form', 'table', 'util', 'admin'], function () {
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;
@@ -50,7 +50,10 @@
                 {field: 'parentId', title: '上级菜单'},
                 {
                     field: 'isMenu', templet: function (d) {
-                        return d.isMenu == 0 ? '<span class="layui-badge layui-bg-gray">菜单</span>' : '<span class="layui-badge-rim">按钮</span>';
+                        if (d.parentId == -1 || !d.menuUrl) {
+                            return '<span class="layui-badge layui-bg-blue">目录</span>';
+                        }
+                        return d.isMenu == 0 ? '<span class="layui-badge-rim">菜单</span>' : '<span class="layui-badge layui-bg-gray">按钮</span>';
                     }, title: '类型'
                 },
                 {
@@ -69,16 +72,16 @@
 
             if (layEvent === 'edit') { // 修改
                 showEditModel(data);
-            } else if (layEvent === 'delete') { // 重置密码
-                layer.confirm('确定删除此菜单吗？', function (i) {
-                    layer.close(i);
+            } else if (layEvent === 'del') { // 重置密码
+                layer.confirm('确定删除此菜单吗？', function () {
                     layer.load(2);
-                    $.post('user/restPsw', {
-                        userId: obj.data.userId
+                    $.post('authorities/delete', {
+                        authority: obj.data.authority
                     }, function (data) {
                         layer.closeAll('loading');
                         if (data.code == 200) {
                             layer.msg(data.msg, {icon: 1});
+                            obj.del();
                         } else {
                             layer.msg(data.msg, {icon: 2});
                         }
