@@ -4,25 +4,25 @@
             <a href="javascript:;"><i class="layui-icon layui-icon-home"></i>&emsp;<cite>主页</cite></a>
             <dl class="layui-nav-child">
                 <dd class="layui-this">
-                    <a lay-href="home/console" href="javascript:;">控制台</a>
+                    <a lay-href="home/console">控制台</a>
                 </dd>
             </dl>
         </li>
 
         <% for(menu in menus) { %>
         <li class="layui-nav-item">
-            <a lay-href="${menu.menuUrl}" href="javascript:;"><i class="layui-icon ${menu.menuIcon}"></i>&emsp;<cite>${menu.menuName}</cite></a>
+            <a lay-href="${menu.menuUrl}"><i class="layui-icon ${menu.menuIcon}"></i>&emsp;<cite>${menu.menuName}</cite></a>
             <% if(menu.subMenus.~size>0) { %>
             <dl class="layui-nav-child">
                 <% for(subMenu in menu.subMenus) { %>
                 <dd>
-                    <a lay-href="${subMenu.menuUrl}" href="javascript:;">${subMenu.menuName}</a>
+                    <a lay-href="${subMenu.menuUrl}">${subMenu.menuName}</a>
 
                     <% if(subMenu.subMenus.~size>0) { %>
                     <dl class="layui-nav-child">
                         <% for(temp in subMenu.subMenus) { %>
                         <dd>
-                            <a lay-href="${temp.menuUrl}" href="javascript:;">${temp.menuName}</a>
+                            <a lay-href="${temp.menuUrl}">${temp.menuName}</a>
                         </dd>
                         <% } %>
                     </dl>
@@ -37,7 +37,7 @@
         <li class="layui-nav-item">
             <a href="javascript:;"><i class="layui-icon layui-icon-senior"></i>&emsp;<cite>系统监控</cite></a>
             <dl class="layui-nav-child">
-                <dd><a lay-href="druid" href="javascript:;">Druid监控</a></dd>
+                <dd><a lay-href="iframe?url=druid">Druid监控</a></dd>
             </dl>
         </li>
 

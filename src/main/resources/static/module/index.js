@@ -5,24 +5,58 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
 
     var index = {
         pageTabs: true,  // 是否开启多标签
-        // 导航栏和tab联动
+        // 路由注册
         initRouter: function () {
-            // 导航点击事件
-            $('.layui-layout-admin .layui-side .layui-nav a[lay-href]').click(function () {
+            // 自动扫描side菜单注册
+            $('.layui-layout-admin .layui-side .layui-nav a[lay-href]').each(function () {
                 var menuName = $(this).text();
                 var menuPath = $(this).attr('lay-href');
                 if ('javascript:;' != menuPath && '' != menuPath) {
-                    index.loadView(menuPath, menuName);
-                    // 移动设备切换页面隐藏侧导航
-                    if (document.body.clientWidth <= 750) {
-                        admin.flexible(true);
-                    }
+                    var key = menuPath.replace(/[?:=&/]/g, '_');
+                    $(this).attr('href', '#!' + key);
+                    Q.reg(key, function () {
+                        index.loadView({
+                            menuId: key,
+                            menuPath: menuPath,
+                            menuName: menuName
+                        });
+                    });
                 }
+            });
+            // 主页
+            Q.init({
+                index: 'home_console'
             });
             // tab选项卡切换监听
             element.on('tab(admin-pagetabs)', function (data) {
                 var layId = $(this).attr('lay-id');
-                admin.activeNav(layId);
+                Q.go(layId);
+            });
+        },
+        // 加载主体部分
+        loadView: function (param) {
+            var menuId = param.menuId;
+            var menuPath = param.menuPath;
+            var menuName = param.menuName;
+            var flag;  // 选项卡是否已添加
+            var contentBody = '.layui-layout-admin .layui-body';
+            // 判断是否开启了选项卡功能
+            if (index.pageTabs) {
+                $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title>li').each(function () {
+                    if ($(this).attr('lay-id') === menuId) {
+                        flag = true;
+                        return false;
+                    }
+                });
+                if (!flag) {
+                    element.tabAdd('admin-pagetabs', {
+                        title: menuName,
+                        id: menuId,
+                        content: '<div id="' + menuId + '"></div>'
+                    });
+                }
+                contentBody = '#' + menuId;
+                element.tabChange('admin-pagetabs', menuId);
                 admin.rollPage('auto');
                 // 解决切换tab滚动条时而消失的问题
                 var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show .admin-iframe')[0];
@@ -31,44 +65,70 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
                     $iframe.scrollWidth;
                     $iframe.style.height = "100%";
                 }
-            });
-        },
-        // 加载主体部分
-        loadView: function (menuPath, menuName) {
-            var flag;  // 选项卡是否已添加
-            var contentBody = '<iframe src="' + menuPath + '" frameborder="0" class="admin-iframe"></iframe>';
-            // 判断是否开启了选项卡功能
-            if (index.pageTabs) {
-                $('.layui-layout-admin .layui-body .layui-tab .layui-tab-title>li').each(function () {
-                    if ($(this).attr('lay-id') === menuPath) {
-                        flag = true;
-                        return false;
+            } else {
+                $('.layui-body.admin-iframe-body').removeClass('admin-iframe-body');
+            }
+            if (!flag || admin.isRefresh) {
+                admin.showLoading('.layui-layout-admin .layui-body');
+                $.ajax({
+                    url: menuPath,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (result) {
+                        var jsonRs = admin.parseJSON(result);
+                        if (jsonRs) {
+                            if (jsonRs.code == 401) {
+                                layer.msg(jsonRs.msg, {icon: 2}, function () {
+                                    location.replace('/login')
+                                }, 1500);
+                                return;
+                            } else if (jsonRs.code == 403) {
+                                layer.msg(jsonRs.msg, {icon: 2});
+                                return;
+                            }
+                        }
+                        $(contentBody).html(result);
+                        admin.isRefresh = false;
+                        element.render('breadcrumb');
+                        admin.removeLoading('.layui-layout-admin .layui-body');
+
+                    },
+                    error: function (xhr) {
+                        success({code: xhr.status, msg: xhr.statusText});
                     }
                 });
-                if (!flag) {
-                    element.tabAdd('admin-pagetabs', {title: menuName, content: contentBody, id: menuPath});
-                }
-                element.tabChange('admin-pagetabs', menuPath);
-                admin.rollPage('auto');
-            } else {
-                $('.layui-layout-admin .layui-body').html(contentBody);
+            }
+            admin.activeNav(Q.lash);
+            // 移动设备切换页面隐藏侧导航
+            if (document.body.clientWidth <= 750) {
+                admin.flexible(true);
             }
         },
         // 检查多标签功能是否开启
         checkPageTabs: function () {
             if (index.pageTabs) {
                 $('.layui-layout-admin').addClass('open-tab');
+                // 如果开启多标签先加载主页
+                element.tabAdd('admin-pagetabs', {
+                    id: 'home_console',
+                    title: '<i class="layui-icon layui-icon-home"></i>',
+                    content: '<div id="home_console"></div>'
+                });
+                $('#home_console').load('home/console');
             } else {
                 $('.layui-layout-admin').removeClass('open-tab');
-                var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show');
-                $('.layui-layout-admin .layui-body').html($iframe.html());
             }
         },
         // 打开新页面
         openNewTab: function (param) {
+            var menuId = param.menuId;
             var url = param.url;
             var title = param.title;
-            index.loadView(url, title);
+            index.loadView({
+                menuId: menuId,
+                menuPath: url,
+                menuName: title
+            });
         },
         // 关闭选项卡
         closeTab: function (menuId) {

@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>权限管理</title>
-    <% include("../layout/cssPart.html"){} %>
-    <% include("../layout/jsPart.html"){} %>
-</head>
-
-<body class="layui-fluid">
-
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">权限管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!home_console">首页</a>
+          <a><cite>权限管理</cite></a>
+        </span>
     </div>
     <div class="layui-card-body">
         <div class="layui-form toolbar">
@@ -40,17 +33,16 @@
         // 渲染表格
         table.render({
             elem: '#auth-table',
-            url: 'authorities/list',
+            url: 'system/authorities/list',
             page: false,
             cols: [[
-                {type: 'numbers'},
+                {field: 'authorityId', title: '权限id'},
                 {field: 'authorityName', title: '权限名称'},
-                {field: 'authority', title: '权限标识'},
-                {field: 'menuUrl', title: '菜单url'},
-                {field: 'parentId', title: '上级菜单'},
+                {field: 'authority', title: '权限url'},
+                {field: 'parentId', title: '上级目录'},
                 {
                     field: 'isMenu', templet: function (d) {
-                        if (d.parentId == -1 || !d.menuUrl) {
+                        if (d.parentId == -1 || !d.authority) {
                             return '<span class="layui-badge layui-bg-blue">目录</span>';
                         }
                         return d.isMenu == 0 ? '<span class="layui-badge-rim">菜单</span>' : '<span class="layui-badge layui-bg-gray">按钮</span>';
@@ -75,7 +67,7 @@
             } else if (layEvent === 'del') { // 重置密码
                 layer.confirm('确定删除此菜单吗？', function () {
                     layer.load(2);
-                    $.post('authorities/delete', {
+                    $.post('system/authorities/delete', {
                         authority: obj.data.authority
                     }, function (data) {
                         layer.closeAll('loading');
@@ -101,7 +93,7 @@
             admin.putTempData('t_authoritie', data);
             admin.popupCenter({
                 title: title,
-                path: 'authorities/editForm',
+                path: 'system/authorities/editForm',
                 finish: function () {
                     table.reload('auth-table', {});
                 }
@@ -109,6 +101,3 @@
         };
     });
 </script>
-
-</body>
-</html>

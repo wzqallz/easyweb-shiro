@@ -3,6 +3,7 @@ layui.define(['layer'], function (exports) {
     var popupRightIndex, popupCenterIndex, popupCenterParam;
 
     var admin = {
+        isRefresh: false,
         // 设置侧栏折叠
         flexible: function (expand) {
             var isExapnd = $('.layui-layout-admin').hasClass('admin-nav-mini');
@@ -20,7 +21,7 @@ layui.define(['layer'], function (exports) {
             $('.layui-layout-admin .layui-side .layui-nav .layui-nav-item .layui-nav-child dd').removeClass('layui-this');
             if (url && url != '') {
                 $('.layui-layout-admin .layui-side .layui-nav .layui-nav-item').removeClass('layui-nav-itemed');
-                var $a = $('.layui-layout-admin .layui-side .layui-nav a[lay-href="' + url + '"]');
+                var $a = $('.layui-layout-admin .layui-side .layui-nav a[href="#!' + url + '"]');
                 $a.parent('dd').addClass('layui-this');
                 $a.parent('dd').parent('.layui-nav-child').parent('.layui-nav-item').addClass('layui-nav-itemed');
             }
@@ -41,9 +42,29 @@ layui.define(['layer'], function (exports) {
                 area: '336px',
                 skin: 'layui-layer-adminRight',
                 success: function () {
-                    //admin.showLoading('#adminPopupR');
-                    $('#adminPopupR').load(path, function () {
-                        //admin.removeLoading('#adminPopupR');
+                    $.ajax({
+                        url: path,
+                        type: 'GET',
+                        dataType: 'html',
+                        success: function (result) {
+                            var jsonRs = admin.parseJSON(result);
+                            if (jsonRs) {
+                                if (jsonRs.code == 401) {
+                                    layer.msg(jsonRs.msg, {icon: 2}, function () {
+                                        location.replace('/login')
+                                    }, 1000);
+                                    return;
+                                } else if (jsonRs.code == 403) {
+                                    layer.msg(jsonRs.msg, {icon: 2});
+                                    return;
+                                }
+                            }
+                            $('#adminPopupR').html(result);
+
+                        },
+                        error: function (xhr) {
+                            success({code: xhr.status, msg: xhr.statusText});
+                        }
                     });
                 },
                 end: function () {
@@ -68,11 +89,29 @@ layui.define(['layer'], function (exports) {
                 resize: false,
                 skin: 'layui-layer-adminCenter',
                 success: function () {
-                    $('#adminPopupC').load(param.path, function () {
-                        $('#adminPopupC .close').click(function () {
-                            layer.close(popupCenterIndex);
-                        });
-                        param.success ? param.success() : '';
+                    $.ajax({
+                        url: param.path,
+                        type: 'GET',
+                        dataType: 'html',
+                        success: function (result) {
+                            var jsonRs = admin.parseJSON(result);
+                            if (jsonRs) {
+                                if (jsonRs.code == 401) {
+                                    layer.msg(jsonRs.msg, {icon: 2}, function () {
+                                        location.replace('/login')
+                                    }, 1000);
+                                    return;
+                                } else if (jsonRs.code == 403) {
+                                    layer.msg(jsonRs.msg, {icon: 2});
+                                    return;
+                                }
+                            }
+                            $('#adminPopupC').html(result);
+                            param.success ? param.success() : '';
+                        },
+                        error: function (xhr) {
+                            success({code: xhr.status, msg: xhr.statusText});
+                        }
                     });
                 },
                 end: function () {
@@ -89,6 +128,29 @@ layui.define(['layer'], function (exports) {
         // 关闭中间弹出
         closePopupCenter: function () {
             layer.close(popupCenterIndex);
+        },
+        // 封装ajax请求
+        req: function (url, data, success, method) {
+            $.ajax({
+                url: url,
+                data: data,
+                type: method,
+                dataType: 'JSON',
+                success: function (result) {
+                    if (result.code == 401) {
+                        layer.msg('登录过期，请重新登录', {icon: 2}, function () {
+                            // location.replace('/login')
+                        }, 1500);
+                    } else if (result.code == 403) {
+                        layer.msg('没有权限', {icon: 2});
+                    } else {
+                        success(result);
+                    }
+                },
+                error: function (xhr) {
+                    success({code: xhr.status, msg: xhr.statusText});
+                }
+            });
         },
         // 显示加载动画
         showLoading: function (element) {
@@ -132,12 +194,19 @@ layui.define(['layer'], function (exports) {
             }
         },
         refresh: function () {
-            var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show .admin-iframe');
-            if (!$iframe) {
-                $iframe = $('.layui-layout-admin .layui-body>.admin-iframe');
-            }
-            if ($iframe) {
-                $iframe[0].contentWindow.location.reload(true);
+            admin.isRefresh = true;
+            Q.refresh();
+        },
+        // 判断是否为json
+        parseJSON: function (str) {
+            if (typeof str == 'string') {
+                try {
+                    var obj = JSON.parse(str);
+                    if (typeof obj == 'object' && obj) {
+                        return obj;
+                    }
+                } catch (e) {
+                }
             }
         }
     };
@@ -210,9 +279,6 @@ layui.define(['layer'], function (exports) {
         // 关闭所有弹窗
         closeDialog: function () {
             layer.closeAll('page');
-            //当在iframe页面关闭自身时
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
         }
     };
 
@@ -256,5 +322,4 @@ layui.define(['layer'], function (exports) {
     });
 
     exports('admin', admin);
-})
-;
+});

@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>主页</title>
-    <% include("../layout/cssPart.html"){} %>
-    <link rel="stylesheet" href="${ctxPath }/assets/css/console.css"/>
-    <% include("../layout/jsPart.html"){} %>
-</head>
-
-<body class="layui-fluid">
-
 <div class="layui-row layui-col-space15">
     <div class="layui-col-xs6 layui-col-md3">
         <div class="layui-card">
@@ -232,6 +220,8 @@
         var element = layui.element;
         var device = layui.device;
 
+        layui.link('assets/css/console.css');
+
         // 渲染轮播
         carousel.render({
             elem: '.layui-carousel',
@@ -244,5 +234,3 @@
         });
     });
 </script>
-</body>
-</html>

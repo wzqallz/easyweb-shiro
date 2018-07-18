@@ -9,16 +9,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">权限标识</label>
+        <label class="layui-form-label">权限url</label>
         <div class="layui-input-block">
-            <input name="authority" placeholder="请输入权限标识" type="text" class="layui-input" maxlength="50"
-                   lay-verify="required" required/>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单url</label>
-        <div class="layui-input-block">
-            <input name="menuUrl" placeholder="请输入菜单url" type="text" class="layui-input"/>
+            <input name="authority" placeholder="请输入菜单url" type="text" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
@@ -60,11 +53,11 @@
         form.render('radio');
         form.render('select');
 
-        var url = 'authorities/add';
+        var url = 'system/authorities/add';
         // 回显user数据
         var authoritie = admin.getTempData('t_authoritie');
         if (authoritie) {
-            url = 'authorities/update';
+            url = 'system/authorities/update';
             form.val('authoritie-form', authoritie);
         }
 

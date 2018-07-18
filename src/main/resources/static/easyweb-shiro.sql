@@ -1,8 +1,8 @@
 /*
-SQLyog 企业版 - MySQL GUI v8.14 
+SQLyog 企业版 - MySQL GUI v8.14
 MySQL - 5.6.34-log : Database - easyweb-shiro
 *********************************************************************
-*/
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -21,21 +21,21 @@ USE `easyweb-shiro`;
 DROP TABLE IF EXISTS `sys_authorities`;
 
 CREATE TABLE `sys_authorities` (
-  `authority` varchar(50) NOT NULL COMMENT '授权标识',
-  `authority_name` varchar(50) NOT NULL COMMENT '权限名称',
-  `menu_url` varchar(100) DEFAULT NULL COMMENT '菜单url',
-  `parent_id` varchar(50) NOT NULL DEFAULT '-1' COMMENT '父id',
+  `authority_id` varchar(8) NOT NULL COMMENT '权限id',
+  `authority_name` varchar(20) NOT NULL COMMENT '权限名称',
+  `authority` varchar(40) DEFAULT NULL COMMENT '授权标识(菜单url)',
+  `parent_id` varchar(8) NOT NULL DEFAULT '-1' COMMENT '父id',
   `is_menu` int(11) NOT NULL DEFAULT '0' COMMENT '0菜单，1按钮',
   `order_number` int(11) NOT NULL DEFAULT '0' COMMENT '排序号',
-  `menu_icon` varchar(50) DEFAULT NULL COMMENT '菜单图标',
+  `menu_icon` varchar(20) DEFAULT NULL COMMENT '菜单图标',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`authority`)
+  PRIMARY KEY (`authority_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='权限表';
 
 /*Data for the table `sys_authorities` */
 
-insert  into `sys_authorities`(`authority`,`authority_name`,`menu_url`,`parent_id`,`is_menu`,`order_number`,`menu_icon`,`create_time`,`update_time`) values ('home','主页',NULL,'-1',0,1,'layui-icon-home','2018-06-29 11:05:41','2018-07-13 09:13:42'),('home:console','控制台','home/console','home',0,2,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system','系统管理',NULL,'-1',0,3,'layui-icon-set','2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:authorities','权限管理','system/authorities','system',0,18,NULL,'2018-06-29 11:05:41','2018-07-13 15:45:13'),('system:authorities:addRoleAuth','添加角色权限','system/authorities/addRoleAuth','system:authorities',1,20,NULL,'2018-06-29 11:05:41','2018-07-13 15:46:49'),('system:authorities:deleteRoleAuth','删除角色权限','system/authorities/deleteRoleAuth','system:authorities',1,21,NULL,'2018-06-29 11:05:41','2018-07-13 15:47:33'),('system:authorities:list','查询所有权限','system/authorities/list','system:authorities',1,19,NULL,'2018-06-29 11:05:41','2018-07-13 15:46:03'),('system:loginRecord','登录日志','system/loginRecord','system',0,16,NULL,'2018-06-29 11:05:41','2018-07-13 15:27:18'),('system:loginRecord:list','查询所有登录日志','system/loginRecord/list','system:loginRecord',1,17,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:role','角色管理','system/role','system',0,11,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:role:add','添加角色','system/role/add','system:role',1,13,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:role:delete','删除角色','system/role/delete','system:role',1,15,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:role:list','查询所有角色','system/role/list','system:role',1,12,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:role:update','修改角色','system/role/update','system:role',1,14,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:user','用户管理','system/user','system',0,4,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:user:add','添加用户','system/user/add','system:user',1,6,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:user:list','查询所有用户','system/user/list','system:user',1,5,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:user:reset:psw','重置密码','system/user/restPsw','system:user',1,10,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:user:update','修改用户','system/user/update','system:user',1,7,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:user:update:psw','修改密码','system/user/updatePsw','system:user',1,9,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('system:user:update:state','修改用户状态','system/user/updateState','system:user',1,8,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42');
+insert  into `sys_authorities`(`authority_id`,`authority_name`,`authority`,`parent_id`,`is_menu`,`order_number`,`menu_icon`,`create_time`,`update_time`) values ('1','系统管理','','-1',0,1,'layui-icon-set','2018-06-29 11:05:41','2018-07-13 09:13:42'),('10','添加角色','system/role/add','8',1,10,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('11','修改角色','system/role/update','8',1,11,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('12','删除角色','system/role/delete','8',1,12,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('13','登录日志','system/loginRecord','1',0,13,NULL,'2018-06-29 11:05:41','2018-07-13 15:27:18'),('14','查询所有登录日志','system/loginRecord/list','13',1,14,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('15','权限管理','system/authorities','1',0,15,NULL,'2018-06-29 11:05:41','2018-07-13 15:45:13'),('16','查询所有权限','system/authorities/list','15',1,16,NULL,'2018-06-29 11:05:41','2018-07-13 15:46:03'),('17','添加角色权限','system/authorities/addRoleAuth','15',1,17,NULL,'2018-06-29 11:05:41','2018-07-13 15:46:49'),('18','删除角色权限','system/authorities/deleteRoleAuth','15',1,18,NULL,'2018-06-29 11:05:41','2018-06-29 11:05:41'),('19','添加权限','system/authorities/add','15',1,19,NULL,'2018-06-29 11:05:41','2018-06-29 11:05:41'),('2','用户管理','system/user','1',0,2,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('20','修改权限','system/authorities/update','15',1,20,NULL,'2018-07-13 09:13:42','2018-07-13 09:13:42'),('21','删除权限','system/authorities/delete','15',1,21,NULL,'2018-06-29 11:05:41','2018-06-29 11:05:41'),('3','查询所有用户','system/user/list','2',1,3,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('4','添加用户','system/user/add','2',1,4,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('5','修改用户','system/user/update','2',1,5,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('6','修改用户状态','system/user/updateState','2',1,6,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('7','重置密码','system/user/restPsw','2',1,7,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('8','角色管理','system/role','1',0,8,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42'),('9','查询所有角色','system/role/list','8',1,9,NULL,'2018-06-29 11:05:41','2018-07-13 09:13:42');
 
 /*Table structure for table `sys_dictionary` */
 
@@ -127,7 +127,7 @@ CREATE TABLE `sys_role` (
 
 /*Data for the table `sys_role` */
 
-insert  into `sys_role`(`role_id`,`role_name`,`comments`,`is_delete`,`create_time`,`update_time`) values ('admin','管理员','系统管理员',0,'2018-02-23 08:31:22','2018-02-23 11:18:26'),('user','普通用户','系统普通用户',0,'2018-02-23 08:32:11','2018-07-13 15:22:13');
+insert  into `sys_role`(`role_id`,`role_name`,`comments`,`is_delete`,`create_time`,`update_time`) values ('admin','管理员','系统管理员',0,'2018-02-23 08:31:22','2018-02-23 11:18:26'),('SJ1UzsU9','超级管理员','超级管理员',0,'2018-07-18 15:22:43','2018-07-18 15:22:42'),('user','普通用户','系统普通用户',0,'2018-02-23 08:32:11','2018-07-18 15:21:14');
 
 /*Table structure for table `sys_role_authorities` */
 
@@ -136,17 +136,17 @@ DROP TABLE IF EXISTS `sys_role_authorities`;
 CREATE TABLE `sys_role_authorities` (
   `id` varchar(8) NOT NULL,
   `role_id` varchar(8) NOT NULL COMMENT '角色id',
-  `authority` varchar(50) NOT NULL COMMENT '权限id',
+  `authority_id` varchar(8) NOT NULL COMMENT '权限id',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  KEY `FK_sys_role_permission_pm` (`authority`),
+  KEY `FK_sys_role_permission_pm` (`authority_id`),
   KEY `FK_sys_role_permission_role` (`role_id`),
-  CONSTRAINT `FK_sys_role_permission_role` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`)
+  CONSTRAINT `FK_sys_role_authorities` FOREIGN KEY (`authority_id`) REFERENCES `sys_authorities` (`authority_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='角色权限关联表';
 
 /*Data for the table `sys_role_authorities` */
 
-insert  into `sys_role_authorities`(`id`,`role_id`,`authority`,`create_time`) values ('005wQVDt','admin','system:loginRecord:list',NULL),('09haT8AT','admin','system:authorities:list','2018-06-28 11:09:04'),('0AKzq7FT','admin','system:authorities','2018-06-28 11:09:04'),('0AxzJIpF','admin','system:authorities:addRoleAuth','2018-06-28 11:09:04'),('0bgpXIfi','admin','system:authorities:deleteRoleAuth','2018-06-28 11:09:04'),('1VhPjXCz','admin','home','2018-06-29 11:05:52'),('8Rhrysco','admin','system','2018-06-27 10:00:15'),('9eXlTGTj','admin','system:user','2018-06-27 10:00:17'),('9qnTrDdm','admin','system:user:list','2018-06-27 10:00:19'),('cAtC3FA0','admin','system:user:add','2018-06-27 10:00:20'),('csaHHw4z','admin','system:user:update','2018-06-27 10:00:19'),('hPhTwVU6','admin','system:user:update:state','2018-06-28 11:09:04'),('iD1wMpz2','admin','system:loginRecord','2018-06-27 10:00:15'),('IrBAr9yw','admin','home:console','2018-07-13 16:01:51'),('jmQ7CmsB','admin','system:user:update:psw','2018-06-27 10:00:15'),('NtEiuLtI','admin','system:user:reset:psw','2018-06-27 10:00:18'),('uDNvJo9q','admin','system:role:delete','2018-06-27 10:00:18'),('vJ19BZln','admin','system:role:update','2018-06-27 10:00:18'),('xnIJW6zG','admin','system:role:add','2018-06-27 10:00:18'),('xyzNzrbs','admin','system:role:list','2018-06-27 10:00:18'),('ZDklBxUv','admin','system:role','2018-06-27 10:00:18');
+insert  into `sys_role_authorities`(`id`,`role_id`,`authority_id`,`create_time`) values ('005wQVDt','admin','1','2018-06-28 11:09:04'),('09haT8AT','admin','2','2018-06-28 11:09:04'),('0AKzq7FT','admin','3','2018-06-28 11:09:04'),('1Qj9H5kz','SJ1UzsU9','19','2018-07-18 15:23:04'),('2o3sf2xW','user','1','2018-07-18 15:23:22'),('6nmuCJzM','admin','4','2018-07-17 16:00:20'),('7qSYXnVi','SJ1UzsU9','7','2018-07-18 15:23:01'),('8DjC5165','SJ1UzsU9','5','2018-07-18 15:22:59'),('8yk5etMH','SJ1UzsU9','2','2018-07-18 15:22:58'),('a0NrPXld','SJ1UzsU9','16','2018-07-18 15:23:06'),('akNm2AD3','SJ1UzsU9','12','2018-07-18 15:23:08'),('apZhCCbO','user','8','2018-07-18 15:23:31'),('Bg5nEJfl','user','3','2018-07-18 15:23:24'),('BNt7X3Cr','SJ1UzsU9','18','2018-07-18 15:23:05'),('cfjsDXXB','SJ1UzsU9','15','2018-07-18 15:23:06'),('Crgi3mox','SJ1UzsU9','17','2018-07-18 15:23:05'),('csaHHw4z','admin','8','2018-06-27 10:00:19'),('eitII7Zx','user','9','2018-07-18 15:23:32'),('fKUMDB4O','SJ1UzsU9','20','2018-07-18 15:23:04'),('g2AuUizU','SJ1UzsU9','3','2018-07-18 15:22:58'),('hKqK9O2m','SJ1UzsU9','11','2018-07-18 15:23:09'),('hPhTwVU6','admin','9','2018-06-28 11:09:04'),('iD1wMpz2','admin','10','2018-06-27 10:00:15'),('jCylC8UF','user','14','2018-07-18 15:23:41'),('jdSxoDqA','user','2','2018-07-18 15:23:23'),('NaNMSpJx','SJ1UzsU9','13','2018-07-18 15:23:08'),('oN8wZ9gK','user','15','2018-07-18 15:23:42'),('qjIcUxlS','admin','13','2018-07-17 14:12:16'),('QORCRACI','SJ1UzsU9','10','2018-07-18 15:23:09'),('RpBYNO15','SJ1UzsU9','14','2018-07-18 15:23:06'),('rqYfrmWD','SJ1UzsU9','8','2018-07-18 15:23:01'),('sPoVbVb9','SJ1UzsU9','9','2018-07-18 15:23:10'),('t2gooRL7','SJ1UzsU9','21','2018-07-18 15:23:03'),('th6i8C0U','SJ1UzsU9','1','2018-07-18 15:22:57'),('TTgM9O78','user','16','2018-07-18 15:23:43'),('u344EoNK','user','13','2018-07-18 15:23:40'),('uDNvJo9q','admin','14','2018-06-27 10:00:18'),('V2gFREKa','SJ1UzsU9','4','2018-07-18 15:22:59'),('vJ19BZln','admin','15','2018-06-27 10:00:18'),('xyzNzrbs','admin','16','2018-06-27 10:00:18'),('yNmgC6PX','SJ1UzsU9','6','2018-07-18 15:23:00');
 
 /*Table structure for table `sys_user` */
 
@@ -174,7 +174,7 @@ CREATE TABLE `sys_user` (
 
 /*Data for the table `sys_user` */
 
-insert  into `sys_user`(`user_id`,`username`,`password`,`nick_name`,`avatar`,`sex`,`phone`,`email`,`email_verified`,`person_id`,`state`,`create_time`,`update_time`) values ('29ogl979','demo','0fa2dd86d6ebca0e12765ebb111310f9','demo',NULL,'男','13625436602',NULL,NULL,NULL,0,'2018-06-28 16:19:32','2018-07-13 16:20:16'),('admin','admin','3fed7a346e430ea4c2aa10250928f4de','管理员','','女','13125062807','whvcse@foxmail.com',NULL,NULL,0,'2017-08-14 14:12:36','2018-07-13 16:19:15'),('DDVTH0MB','dsad','b6c0b011afcddc0e90ebac83179b30ca','dsad',NULL,'女','13125648523',NULL,NULL,NULL,0,'2018-07-13 13:51:06','2018-07-13 14:40:30');
+insert  into `sys_user`(`user_id`,`username`,`password`,`nick_name`,`avatar`,`sex`,`phone`,`email`,`email_verified`,`person_id`,`state`,`create_time`,`update_time`) values ('admin','admin','3fed7a346e430ea4c2aa10250928f4de','管理员','','男','12345678901','whvcse@foxmail.com',NULL,NULL,0,'2017-08-14 14:12:36','2018-07-18 15:30:27'),('PG2itTRt','synchronized','12c597cbeed217a42c7df8eb258cdd65','超级管理员',NULL,'男','12345678901',NULL,NULL,NULL,0,'2018-07-18 15:25:50','2018-07-18 15:31:40');
 
 /*Table structure for table `sys_user_role` */
 
@@ -194,7 +194,7 @@ CREATE TABLE `sys_user_role` (
 
 /*Data for the table `sys_user_role` */
 
-insert  into `sys_user_role`(`id`,`user_id`,`role_id`,`create_time`) values ('SnDXi5kX','admin','admin','2018-05-11 12:00:44'),('TuDszoDZ','DDVTH0MB','user','2018-07-13 13:53:28'),('ZuOlgqZq','29ogl979','user','2018-06-28 16:25:23');
+insert  into `sys_user_role`(`id`,`user_id`,`role_id`,`create_time`) values ('cH3Gf6K8','admin','admin','2018-07-18 15:30:24'),('zCemkb3B','PG2itTRt','SJ1UzsU9','2018-07-18 15:25:50');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

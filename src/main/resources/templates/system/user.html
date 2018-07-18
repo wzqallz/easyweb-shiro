@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>用户管理</title>
-    <% include("../layout/cssPart.html"){} %>
-    <% include("../layout/jsPart.html"){} %>
-</head>
-
-<body class="layui-fluid">
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">用户管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!home_console">首页</a>
+          <a><cite>用户管理</cite></a>
+        </span>
     </div>
     <div class="layui-card-body">
         <div class="layui-form toolbar">
@@ -24,7 +18,9 @@
             </select>&emsp;
             <input id="user-search-value" class="layui-input search-input" type="text" placeholder="输入关键字"/>&emsp;
             <button id="user-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
-            <button id="user-btn-add" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+            <button id="user-btn-add" class="layui-btn icon-btn" lay-tips="新用户密码为123456"><i
+                    class="layui-icon">&#xe654;</i>添加
+            </button>
         </div>
 
         <table class="layui-table" id="user-table" lay-filter="user-table"></table>
@@ -52,10 +48,12 @@
         var admin = layui.admin;
         var element = layui.element;
 
+        form.render('select');
+
         // 渲染表格
         table.render({
             elem: '#user-table',
-            url: 'user/list',
+            url: 'system/user/list',
             page: true,
             cols: [[
                 {type: 'numbers'},
@@ -87,10 +85,10 @@
             if (layEvent === 'edit') { // 修改
                 showEditModel(data);
             } else if (layEvent === 'reset') { // 重置密码
-                top.layer.confirm('确定重置此用户的密码吗？', function (i) {
+                layer.confirm('确定重置此用户的密码吗？', function (i) {
                     layer.close(i);
                     layer.load(2);
-                    $.post('user/restPsw', {
+                    $.post('system/user/restPsw', {
                         userId: obj.data.userId
                     }, function (data) {
                         layer.closeAll('loading');
@@ -110,7 +108,7 @@
             admin.putTempData('t_user', data);
             admin.popupCenter({
                 title: title,
-                path: 'user/editForm',
+                path: 'system/user/editForm',
                 finish: function () {
                     table.reload('user-table', {});
                 }
@@ -127,7 +125,7 @@
         // 修改user状态
         form.on('switch(user-tpl-state)', function (obj) {
             layer.load(2);
-            $.post('user/updateState', {
+            $.post('system/user/updateState', {
                 userId: obj.elem.value,
                 state: obj.elem.checked ? 0 : 1
             }, function (data) {
@@ -144,5 +142,3 @@
         });
     });
 </script>
-</body>
-</html>

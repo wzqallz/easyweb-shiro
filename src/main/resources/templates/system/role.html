@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>角色管理</title>
-    <% include("../layout/cssPart.html"){} %>
-    <% include("../layout/jsPart.html"){} %>
-</head>
-
-<body class="layui-fluid">
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">角色管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!home_console">首页</a>
+          <a><cite>角色管理</cite></a>
+        </span>
     </div>
     <div class="layui-card-body">
         <div class="layui-form toolbar">
@@ -67,7 +61,7 @@
         //渲染表格
         table.render({
             elem: '#role-table',
-            url: 'role/list',
+            url: 'system/role/list',
             page: false,
             cols: [[
                 {type: 'numbers'},
@@ -112,7 +106,7 @@
             } else if (obj.event === 'del') { //删除
                 layer.confirm('确定要删除吗？', function () {
                     layer.load(2);
-                    $.post('role/delete', {
+                    $.post('system/role/delete', {
                         roleId: obj.data.roleId
                     }, function (data) {
                         layer.closeAll('loading');
@@ -124,13 +118,13 @@
                         }
                     });
                 });
-            }else if(obj.event === 'auth'){  // 权限管理
-                top.layer.open({
+            } else if (obj.event === 'auth') {  // 权限管理
+                layer.open({
                     type: 2,
                     title: '权限管理',
                     area: ['580px', '400px'],
                     offset: '120px',
-                    content: 'system/role/auth?roleId='+obj.data.roleId
+                    content: 'system/role/auth?roleId=' + obj.data.roleId
                 });
             }
         });
@@ -151,9 +145,9 @@
                 content: $('#role-model').html(),
                 success: function () {
                     $('#role-form')[0].reset();
-                    formUrl = 'role/add';
+                    formUrl = 'system/role/add';
                     if (data) {
-                        formUrl = 'role/update';
+                        formUrl = 'system/role/update';
                         form.val('role-form', data);
                     }
                     $('#role-form .close').click(function () {
@@ -166,6 +160,3 @@
     });
 
 </script>
-
-</body>
-</html>
