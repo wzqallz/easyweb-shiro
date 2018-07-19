@@ -28,49 +28,22 @@ layui.define(['layer'], function (exports) {
         },
         // 右侧弹出
         popupRight: function (path) {
-            popupRightIndex = layer.open({
-                type: 1,
-                id: 'adminPopupR',
-                anim: 2,
-                isOutAnim: false,
-                title: false,
-                closeBtn: false,
-                offset: 'r',
-                shade: .2,
-                shadeClose: true,
-                resize: false,
-                area: '336px',
-                skin: 'layui-layer-adminRight',
-                success: function () {
-                    $.ajax({
-                        url: path,
-                        type: 'GET',
-                        dataType: 'html',
-                        success: function (result) {
-                            var jsonRs = admin.parseJSON(result);
-                            if (jsonRs) {
-                                if (jsonRs.code == 401) {
-                                    layer.msg(jsonRs.msg, {icon: 2}, function () {
-                                        location.replace('/login')
-                                    }, 1000);
-                                    return;
-                                } else if (jsonRs.code == 403) {
-                                    layer.msg(jsonRs.msg, {icon: 2});
-                                    return;
-                                }
-                            }
-                            $('#adminPopupR').html(result);
-
-                        },
-                        error: function (xhr) {
-                            success({code: xhr.status, msg: xhr.statusText});
-                        }
-                    });
-                },
-                end: function () {
-                    layer.closeAll('tips');
-                }
-            });
+            var param = new Object();
+            param.path = path;
+            param.id = 'adminPopupR';
+            param.title = false;
+            param.anim = 2;
+            param.isOutAnim = false;
+            param.closeBtn = false;
+            param.offset = 'r';
+            param.shadeClose = true;
+            param.area = '336px';
+            param.skin = 'layui-layer-adminRight';
+            param.end = function () {
+                layer.closeAll('tips');
+            };
+            popupRightIndex = admin.open(param);
+            return popupRightIndex;
         },
         // 关闭右侧弹出
         closePopupRight: function () {
@@ -78,47 +51,10 @@ layui.define(['layer'], function (exports) {
         },
         // 中间弹出
         popupCenter: function (param) {
+            param.id = 'adminPopupC';
             popupCenterParam = param;
-            popupCenterIndex = layer.open({
-                type: 1,
-                id: 'adminPopupC',
-                title: param.title ? param.title : false,
-                shade: .2,
-                offset: '120px',
-                area: param.area ? param.area : '450px',
-                resize: false,
-                skin: 'layui-layer-adminCenter',
-                success: function () {
-                    $.ajax({
-                        url: param.path,
-                        type: 'GET',
-                        dataType: 'html',
-                        success: function (result) {
-                            var jsonRs = admin.parseJSON(result);
-                            if (jsonRs) {
-                                if (jsonRs.code == 401) {
-                                    layer.msg(jsonRs.msg, {icon: 2}, function () {
-                                        location.replace('/login')
-                                    }, 1000);
-                                    return;
-                                } else if (jsonRs.code == 403) {
-                                    layer.msg(jsonRs.msg, {icon: 2});
-                                    return;
-                                }
-                            }
-                            $('#adminPopupC').html(result);
-                            param.success ? param.success() : '';
-                        },
-                        error: function (xhr) {
-                            success({code: xhr.status, msg: xhr.statusText});
-                        }
-                    });
-                },
-                end: function () {
-                    layer.closeAll('tips');
-                    param.end ? param.end() : '';
-                }
-            });
+            popupCenterIndex = admin.open(param);
+            return popupCenterIndex;
         },
         // 关闭中间弹出并且触发finish回调
         finishPopupCenter: function () {
@@ -129,28 +65,67 @@ layui.define(['layer'], function (exports) {
         closePopupCenter: function () {
             layer.close(popupCenterIndex);
         },
-        // 封装ajax请求
+        // 封装layer.open
+        open: function (param) {
+            var sCallBack = param.success;
+            param.type = 1;
+            param.area = param.area ? param.area : '450px';
+            param.offset = param.offset ? param.offset : '120px';
+            param.resize ? param.resize : false;
+            param.shade ? param.shade : .2;
+            param.success = function (layero, index) {
+                sCallBack ? sCallBack(layero, index) : '';
+                admin.ajax({
+                    url: param.path,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (result, status, xhr) {
+                        $(layero).children('.layui-layer-content').html(result);
+                    }
+                });
+            };
+            return layer.open(param);
+        },
+        // 封装ajax请求，返回数据类型为json
         req: function (url, data, success, method) {
-            $.ajax({
+            admin.ajax({
                 url: url,
                 data: data,
                 type: method,
-                dataType: 'JSON',
-                success: function (result) {
-                    if (result.code == 401) {
-                        layer.msg('登录过期，请重新登录', {icon: 2}, function () {
-                            // location.replace('/login')
-                        }, 1500);
-                    } else if (result.code == 403) {
-                        layer.msg('没有权限', {icon: 2});
-                    } else {
-                        success(result);
-                    }
-                },
-                error: function (xhr) {
-                    success({code: xhr.status, msg: xhr.statusText});
+                dataType: 'json',
+                success: function (result, status, xhr) {
+                    success(result, status, xhr);
                 }
             });
+        },
+        // 封装ajax请求
+        ajax: function (param) {
+            var successCallback = param.success;
+            param.success = function (result, status, xhr) {
+                // 判断登录过期和没有权限
+                var jsonRs;
+                if ('json' == param.dataType.toLowerCase()) {
+                    jsonRs = result;
+                } else if ('html' == param.dataType.toLowerCase() || 'text' == param.dataType.toLowerCase()) {
+                    jsonRs = admin.parseJSON(result);
+                }
+                if (jsonRs) {
+                    if (jsonRs.code == 401) {
+                        layer.msg(jsonRs.msg, {icon: 2, time: 1500}, function () {
+                            location.replace('/login');
+                        }, 1000);
+                        return;
+                    } else if (jsonRs.code == 403) {
+                        layer.msg(jsonRs.msg, {icon: 2});
+                        return;
+                    }
+                }
+                successCallback(result, status, xhr);
+            };
+            param.error = function (xhr) {
+                success({code: xhr.status, msg: xhr.statusText});
+            };
+            $.ajax(param);
         },
         // 显示加载动画
         showLoading: function (element) {
@@ -187,12 +162,12 @@ layui.define(['layer'], function (exports) {
                         autoLeft += $(this).outerWidth();
                     }
                 });
-                // console.log(autoLeft);
                 $tabTitle.scrollLeft(autoLeft - 47);
             } else {
                 $tabTitle.scrollLeft(left + 120);
             }
         },
+        // 刷新主题部分
         refresh: function () {
             admin.isRefresh = true;
             Q.refresh();
@@ -213,20 +188,25 @@ layui.define(['layer'], function (exports) {
 
     // ewAdmin提供的事件
     admin.events = {
-        flexible: function (e) {  // 折叠侧导航
+        // 折叠侧导航
+        flexible: function (e) {
             var expand = $('.layui-layout-admin').hasClass('admin-nav-mini');
             admin.flexible(expand);
         },
-        refresh: function () {  // 刷新主体部分
+        // 刷新主体部分
+        refresh: function () {
             admin.refresh();
         },
-        back: function () {  //后退
+        //后退
+        back: function () {
             history.back();
         },
-        theme: function () {  // 设置主题
+        // 设置主题
+        theme: function () {
             admin.popupRight('home/theme');
         },
-        fullScreen: function (e) {  // 全屏
+        // 全屏
+        fullScreen: function (e) {
             var ac = 'layui-icon-screen-full', ic = 'layui-icon-screen-restore';
             var ti = $(this).find('i');
 

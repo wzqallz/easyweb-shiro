@@ -60,6 +60,8 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
                 contentBody = '#' + menuId;
                 element.tabChange('admin-pagetabs', menuId);
                 admin.rollPage('auto');
+                // 切换tab关闭表格内浮窗
+                $('.layui-table-tips-c').trigger('click');
                 // 解决切换tab滚动条时而消失的问题
                 var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show .admin-iframe')[0];
                 if ($iframe) {
@@ -72,31 +74,15 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
             }
             if (!flag || admin.isRefresh) {
                 admin.showLoading('.layui-layout-admin .layui-body');
-                $.ajax({
+                admin.ajax({
                     url: menuPath,
                     type: 'GET',
                     dataType: 'html',
-                    success: function (result) {
-                        var jsonRs = admin.parseJSON(result);
-                        if (jsonRs) {
-                            if (jsonRs.code == 401) {
-                                layer.msg(jsonRs.msg, {icon: 2}, function () {
-                                    location.replace('/login')
-                                }, 1500);
-                                return;
-                            } else if (jsonRs.code == 403) {
-                                layer.msg(jsonRs.msg, {icon: 2});
-                                return;
-                            }
-                        }
+                    success: function (result, status, xhr) {
                         $(contentBody).html(result);
                         admin.isRefresh = false;
                         element.render('breadcrumb');
                         admin.removeLoading('.layui-layout-admin .layui-body');
-
-                    },
-                    error: function (xhr) {
-                        success({code: xhr.status, msg: xhr.statusText});
                     }
                 });
             }

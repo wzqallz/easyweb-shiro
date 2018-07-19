@@ -450,8 +450,8 @@ html {
 }
 
 /** dialog超出显示 */
-.layui-layer-page .layui-layer-content {
-    overflow: visible !important;
+.layui-layout-body .layui-layer-page .layui-layer-content {
+    overflow: visible;
 }
 
 /* layui文档官网右侧弹窗目录列表的样式 */
