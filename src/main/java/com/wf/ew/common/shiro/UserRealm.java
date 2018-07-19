@@ -2,6 +2,7 @@ package com.wf.ew.common.shiro;
 
 import com.wf.ew.common.utils.StringUtil;
 import com.wf.ew.system.model.Authorities;
+import com.wf.ew.system.model.Role;
 import com.wf.ew.system.model.User;
 import com.wf.ew.system.service.AuthoritiesService;
 import com.wf.ew.system.service.RoleService;
@@ -35,12 +36,14 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        String[] userRoles = roleService.getRoleIds(user.getUserId());
+        // 角色
+        List<Role> userRoles = roleService.getByUserId(user.getUserId());
         Set<String> roles = new HashSet<>();
-        for (int i = 0; i < userRoles.length; i++) {
-            roles.add(userRoles[i]);
+        for (int i = 0; i < userRoles.size(); i++) {
+            roles.add(userRoles.get(i).getRoleId());
         }
         authorizationInfo.setRoles(roles);
+        // 权限
         List<Authorities> authorities = authoritiesService.listByUserId(user.getUserId());
         Set<String> permissions = new HashSet<>();
         for (int i = 0; i < authorities.size(); i++) {

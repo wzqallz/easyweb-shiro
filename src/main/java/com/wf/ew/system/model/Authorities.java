@@ -5,26 +5,29 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.util.Date;
 
+/**
+ * 权限表
+ */
 @TableName("sys_authorities")
 public class Authorities {
     @TableId
-    private String authorityId;
+    private String authorityId;  // 权限id
 
-    private String authorityName;
+    private String authorityName;  // 权限名称
 
-    private String authority;
+    private String authority;  // 权限标识（菜单url，如果为空不会添加在shiro的权限列表中）
 
-    private String parentId;
+    private String parentId;  // 上级菜单
 
-    private int isMenu;
+    private int isMenu;  // 菜单还是按钮（菜单会显示在侧导航，按钮不会显示在侧导航，只要url不是空，都会作为权限标识）
 
-    private int orderNumber;
+    private int orderNumber;  // 排序号
 
-    private String menuIcon;
+    private String menuIcon;  // 菜单图标
 
-    private Date createTime;
+    private Date createTime;  // 创建时间
 
-    private Date updateTime;
+    private Date updateTime;  // 修改时间
 
     public String getAuthority() {
         return authority;

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RoleService {
 
-    String[] getRoleIds(String userId);
+    List<Role> getByUserId(String userId);
 
     List<Role> list(boolean showDelete);
 
@@ -16,8 +16,8 @@ public interface RoleService {
 
     boolean update(Role role);
 
-    boolean updateState(String roleId, int isDelete);
+    boolean updateState(String roleId, int isDelete);  // 逻辑删除
 
-    boolean delete(String roleId);
+    boolean delete(String roleId);  // 物理删除
 
 }

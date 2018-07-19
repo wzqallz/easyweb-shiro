@@ -2,13 +2,12 @@ package com.wf.ew.system.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.wf.ew.common.exception.BusinessException;
 import com.wf.ew.common.exception.ParameterException;
 import com.wf.ew.common.utils.UUIDUtil;
 import com.wf.ew.system.dao.RoleAuthoritiesMapper;
 import com.wf.ew.system.dao.RoleMapper;
-import com.wf.ew.system.dao.UserRoleMapper;
 import com.wf.ew.system.model.Role;
-import com.wf.ew.system.model.UserRole;
 import com.wf.ew.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,17 +22,10 @@ public class RoleServiceImpl implements RoleService {
     private RoleMapper roleMapper;
     @Autowired
     private RoleAuthoritiesMapper roleAuthoritiesMapper;
-    @Autowired
-    private UserRoleMapper userRoleMapper;
 
     @Override
-    public String[] getRoleIds(String userId) {
-        List<UserRole> userRoles = userRoleMapper.selectList(new EntityWrapper().eq("user_id", userId));
-        String[] roleIds = new String[userRoles.size()];
-        for (int i = 0; i < userRoles.size(); i++) {
-            roleIds[i] = userRoles.get(i).getRoleId();
-        }
-        return roleIds;
+    public List<Role> getByUserId(String userId) {
+        return roleMapper.selectByUserId(userId);
     }
 
     @Override
@@ -68,7 +60,9 @@ public class RoleServiceImpl implements RoleService {
         role.setIsDelete(isDelete);
         boolean rs = roleMapper.updateById(role) > 0;
         if (rs) {  //删除角色的权限
-            roleAuthoritiesMapper.delete(new EntityWrapper().eq("role_id", roleId));
+            if (roleAuthoritiesMapper.delete(new EntityWrapper().eq("role_id", roleId)) <= 0) {
+                throw new BusinessException("删除失败，请重试");
+            }
         }
         return rs;
     }

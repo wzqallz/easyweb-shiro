@@ -10,17 +10,15 @@ public interface AuthoritiesService {
 
     List<Authorities> list();
 
-    List<String> listByRoleId(List<String> roleId);
+    List<Authorities> listByRoleIds(List<String> roleId);
 
-    List<String> listByRoleId(String roleId);
+    List<Authorities> listByRoleId(String roleId);
 
     boolean add(Authorities authorities);
 
     boolean update(Authorities authorities);
 
-    boolean delete(String authority);
-
-    boolean add(List<Authorities> authorities);
+    boolean delete(String authorityId);
 
     boolean addRoleAuth(String roleId, String authId);
 

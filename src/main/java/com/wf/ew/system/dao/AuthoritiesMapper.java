@@ -10,5 +10,7 @@ public interface AuthoritiesMapper extends BaseMapper<Authorities> {
 
     List<Authorities> listByUserId(String userId);
 
-    List<String> listByRoleId(@Param("roleIds") List<String> roleIds);
+    List<Authorities> listByRoleIds(@Param("roleIds") List<String> roleIds);
+
+    List<Authorities> listByRoleId(String roleId);
 }

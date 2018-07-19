@@ -2,22 +2,30 @@ package com.wf.ew.system.model;
 
 import java.util.Date;
 
+/**
+ * 人员表
+ * <p>
+ * 用户(user)跟人员(person)的区别就是：用户只存放账号、密码等基本信息，人员存放跟业务相关的信息，这样便于做统一用户认证
+ * 如果是学校之类的系统，person表就不止一个，比如分学生表和教师表，所以这里的person没有写mapper和service，
+ * 如果你的系统有多个人员类型，请自行建多个表，删除person即可，如果是企业系统，人员表只要一个，请对person表进行字段补充，建议不要修改用户表user的字段
+ * </p>
+ */
 public class Person {
-    private String personId;
+    private String personId;  // 人员id
 
-    private String trueName;
+    private String trueName;  // 真实姓名
 
-    private String departmentId;
+    private String departmentId;  // 部门id
 
-    private String positionId;
+    private String positionId;  // 岗位id(如果你的系统不复杂，岗位id可以用用户表的角色代替，如果你的系统组织架构很复杂，岗位是树形结构，单独建立岗位表)
 
-    private Date birthday;
+    private Date birthday;  // 出生日期
 
-    private String idCard;
+    private String idCard;  // 身份证号
 
-    private Date createTime;
+    private Date createTime;  // 入职时间
 
-    private Date updateTime;
+    private Date updateTime;  // 修改时间
 
     public String getPersonId() {
         return personId;

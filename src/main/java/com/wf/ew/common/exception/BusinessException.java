@@ -32,7 +32,7 @@ public class BusinessException extends IException {
     public String getMessage() {
         String message = super.getMessage();
         if (message == null) {
-            message = "服务器错误";
+            message = "系统繁忙";
         }
         return message;
     }

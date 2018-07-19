@@ -9,7 +9,6 @@ import com.wf.ew.common.exception.ParameterException;
 import com.wf.ew.common.shiro.EndecryptUtil;
 import com.wf.ew.common.utils.StringUtil;
 import com.wf.ew.common.utils.UUIDUtil;
-import com.wf.ew.system.dao.RoleMapper;
 import com.wf.ew.system.dao.UserMapper;
 import com.wf.ew.system.dao.UserRoleMapper;
 import com.wf.ew.system.model.Role;
@@ -29,8 +28,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private RoleMapper roleMapper;
-    @Autowired
     private UserRoleMapper userRoleMapper;
 
     @Override
@@ -40,34 +37,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult<User> list(int pageNum, int pageSize, boolean showDelete, String column, String value) {
-        Wrapper<User> wrapper = new EntityWrapper<User>();
+        Wrapper<User> wrapper = new EntityWrapper<>();
         if (StringUtil.isNotBlank(column)) {
             wrapper.like(column, value);
         }
-        if (!showDelete) {
+        if (!showDelete) {  // 不显示锁定的用户
             wrapper.eq("state", 0);
         }
         Page<User> userPage = new Page<>(pageNum, pageSize);
-        List<User> userList = userMapper.selectPage(userPage, wrapper);
+        List<User> userList = userMapper.selectPage(userPage, wrapper.orderBy("create_time", true));
         // 查询user的角色
-        List<String> userIds = new ArrayList<>();
+        List<UserRole> userRoles = userRoleMapper.selectByUserIds(getUserIds(userList));
         for (User one : userList) {
-            userIds.add(one.getUserId());
-        }
-        List<Role> roles = roleMapper.selectList(null);
-        List<UserRole> userRoles = userRoleMapper.selectList(new EntityWrapper().in("user_id", userIds));
-        for (User one : userList) {
-            List<Role> tempUrs = new ArrayList<>();
+            List<Role> tempURs = new ArrayList<>();
             for (UserRole ur : userRoles) {
                 if (one.getUserId().equals(ur.getUserId())) {
-                    for (Role r : roles) {
-                        if (ur.getRoleId().equals(r.getRoleId())) {
-                            tempUrs.add(r);
-                        }
-                    }
+                    tempURs.add(new Role(ur.getRoleId(), ur.getRoleName()));
                 }
             }
-            one.setRoles(tempUrs);
+            one.setRoles(tempURs);
         }
         return new PageResult<>(userPage.getTotal(), userList);
     }
@@ -75,22 +63,21 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean add(User user) throws BusinessException {
-        String userId = UUIDUtil.randomUUID8();
-        user.setUserId(userId);
-        String finalSecret = EndecryptUtil.encrytMd5(user.getPassword(), userId, 3);
-        user.setPassword(finalSecret);
-        user.setState(0);
-        user.setCreateTime(new Date());
-        try {
-            boolean rs = userMapper.insert(user) > 0;
-            if (rs) {
-                addUserRole(userId, user.getRoles());
-            }
-            return rs;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (userMapper.getByUsername(user.getUsername()) != null) {
             throw new BusinessException("账号已经存在");
         }
+        String userId = UUIDUtil.randomUUID8();
+        user.setUserId(userId);
+        user.setPassword(EndecryptUtil.encrytMd5(user.getPassword(), userId, 3));
+        user.setState(0);
+        user.setCreateTime(new Date());
+        boolean rs = userMapper.insert(user) > 0;
+        if (rs) {
+            if (!addUserRole(userId, user.getRoles())) {
+                throw new BusinessException("添加失败，请重试");
+            }
+        }
+        return rs;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -98,15 +85,22 @@ public class UserServiceImpl implements UserService {
     public boolean update(User user) {
         boolean rs = userMapper.updateById(user) > 0;
         if (rs) {
-            userRoleMapper.delete(new EntityWrapper().eq("user_id", user.getUserId()));
-            addUserRole(user.getUserId(), user.getRoles());
+            if (userRoleMapper.delete(new EntityWrapper().eq("user_id", user.getUserId())) <= 0) {
+                throw new BusinessException("修改失败，请重试");
+            }
+            if (!addUserRole(user.getUserId(), user.getRoles())) {
+                throw new BusinessException("修改失败，请重试");
+            }
         }
         return rs;
     }
 
-    private void addUserRole(String userId, List<Role> roles) {
-        if (roles == null) {
-            return;
+    /**
+     * 添加用户角色
+     */
+    private boolean addUserRole(String userId, List<Role> roles) {
+        if (roles == null || roles.size() <= 0) {
+            return false;
         }
         for (Role role : roles) {
             UserRole userRole = new UserRole();
@@ -114,8 +108,12 @@ public class UserServiceImpl implements UserService {
             userRole.setUserId(userId);
             userRole.setRoleId(role.getRoleId());
             userRole.setCreateTime(new Date());
-            userRoleMapper.insert(userRole);
+            boolean rs = userRoleMapper.insert(userRole) > 0;
+            if (!rs) {
+                return false;
+            }
         }
+        return true;
     }
 
     @Override
@@ -133,8 +131,7 @@ public class UserServiceImpl implements UserService {
     public boolean updatePsw(String userId, String password) {
         User user = new User();
         user.setUserId(userId);
-        String finalSecret = EndecryptUtil.encrytMd5(password, userId, 3);
-        user.setPassword(finalSecret);
+        user.setPassword(EndecryptUtil.encrytMd5(password, userId, 3));
         return userMapper.updateById(user) > 0;
     }
 
@@ -146,5 +143,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean delete(String userId) {
         return userMapper.deleteById(userId) > 0;
+    }
+
+    private List<String> getUserIds(List<User> userList) {
+        List<String> userIds = new ArrayList<>();
+        for (User one : userList) {
+            userIds.add(one.getUserId());
+        }
+        return userIds;
     }
 }

@@ -33,20 +33,16 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     }
 
     @Override
-    public List<String> listByRoleId(List<String> roleIds) {
+    public List<Authorities> listByRoleIds(List<String> roleIds) {
         if (roleIds == null || roleIds.size() == 0) {
             return new ArrayList<>();
         }
-        return authoritiesMapper.listByRoleId(roleIds);
+        return authoritiesMapper.listByRoleIds(roleIds);
     }
 
     @Override
-    public List<String> listByRoleId(String roleId) {
-        List<String> roleIds = new ArrayList<>();
-        if (roleId != null && !roleId.trim().isEmpty()) {
-            roleIds.add(roleId);
-        }
-        return listByRoleId(roleIds);
+    public List<Authorities> listByRoleId(String roleId) {
+        return authoritiesMapper.listByRoleId(roleId);
     }
 
     @Override
@@ -66,18 +62,6 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     public boolean delete(String authorityId) {
         roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("authority_id", authorityId));
         return authoritiesMapper.deleteById(authorityId) > 0;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean add(List<Authorities> authorities) {
-        authoritiesMapper.delete(null);
-        for (Authorities one : authorities) {
-            one.setCreateTime(new Date());
-            authoritiesMapper.insert(one);
-        }
-        roleAuthoritiesMapper.deleteTrash();
-        return true;
     }
 
     @Override

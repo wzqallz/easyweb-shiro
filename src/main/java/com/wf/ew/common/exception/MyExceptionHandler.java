@@ -32,7 +32,7 @@ public class MyExceptionHandler {
         } else {
             String message = ex.getMessage();
             map.put("code", 500);
-            map.put("msg", message == null || message.trim().isEmpty() ? "未知错误" : message);
+            map.put("msg", message == null || message.trim().isEmpty() ? "系统繁忙" : message);
             map.put("details", message);
             logger.error(ex.getMessage(), ex);
             ex.printStackTrace();

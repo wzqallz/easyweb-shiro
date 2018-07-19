@@ -53,12 +53,12 @@ public class AuthoritiesController extends BaseController {
     public PageResult<Map<String, Object>> list(String roleId) {
         List<Map<String, Object>> maps = new ArrayList<>();
         List<Authorities> authorities = authoritiesService.list();
-        List<String> roleAuths = authoritiesService.listByRoleId(roleId);
+        List<Authorities> roleAuths = authoritiesService.listByRoleId(roleId);
         for (Authorities one : authorities) {
             Map<String, Object> map = ReflectUtil.objectToMap(one);
             map.put("checked", 0);
-            for (String roleAuth : roleAuths) {
-                if (one.getAuthorityId().equals(roleAuth)) {
+            for (Authorities roleAuth : roleAuths) {
+                if (one.getAuthorityId().equals(roleAuth.getAuthorityId())) {
                     map.put("checked", 1);
                     break;
                 }

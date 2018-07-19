@@ -7,37 +7,39 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 用户表
+ */
 @TableName("sys_user")
 public class User {
     @TableId
-    private String userId;
+    private String userId;  // 主键id
 
-    private String username;
+    private String username;  // 账号
 
-    private String password;
+    private String password;  // 密码
 
-    private String nickName;
+    private String nickName;  // 昵称
 
-    private String avatar;
+    private String avatar;  // 头像
 
-    private String sex;
+    private String sex;  // 性别
 
-    private String phone;
+    private String phone;  // 手机号
 
-    private String email;
+    private String email;  // 邮箱
 
-    private Integer emailVerified;
+    private Integer emailVerified;  // 邮箱是否验证
 
-    private String personId;
+    private String personId;  // 人员id，关联person表，如果是教学系统，则关联学生表和教师表
 
-    private Integer state;
+    private Integer personType;  // 人员类型，比如：0学生，1教师
 
-    private Date createTime;
+    private Integer state;  // 用户状态，0正常，1锁定
 
-    private Date updateTime;
+    private Date createTime;  // 注册时间
 
-    @TableField(exist = false)
-    private List<Authorities> authorities;  //权限
+    private Date updateTime;  // 修改时间
 
     @TableField(exist = false)
     private List<Role> roles;  //角色
@@ -122,6 +124,14 @@ public class User {
         this.personId = personId;
     }
 
+    public Integer getPersonType() {
+        return personType;
+    }
+
+    public void setPersonType(Integer personType) {
+        this.personType = personType;
+    }
+
     public Integer getState() {
         return state;
     }
@@ -144,14 +154,6 @@ public class User {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public List<Authorities> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(List<Authorities> authorities) {
-        this.authorities = authorities;
     }
 
     public List<Role> getRoles() {

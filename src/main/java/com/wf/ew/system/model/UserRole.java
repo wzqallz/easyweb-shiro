@@ -1,20 +1,28 @@
 package com.wf.ew.system.model;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.util.Date;
 
+/**
+ * 用户角色关联表
+ * 如果你的用户只对应一个角色，把前台的多选select改成单选即可，不需要改表结构
+ */
 @TableName("sys_user_role")
 public class UserRole {
     @TableId
-    private String id;
+    private String id;  // 主键
 
-    private String userId;
+    private String userId;  // 用户id
 
-    private String roleId;
+    private String roleId;  // 角色id
 
-    private Date createTime;
+    private Date createTime;  // 创建时间
+
+    @TableField(exist = true)
+    private String roleName;  // 角色名称
 
     public String getId() {
         return id;
@@ -48,4 +56,11 @@ public class UserRole {
         this.createTime = createTime;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }

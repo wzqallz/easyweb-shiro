@@ -5,5 +5,4 @@ import com.wf.ew.system.model.RoleAuthorities;
 
 public interface RoleAuthoritiesMapper extends BaseMapper<RoleAuthorities> {
 
-    int deleteTrash();
 }

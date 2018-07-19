@@ -1,6 +1,5 @@
 package com.wf.ew.common.shiro;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 

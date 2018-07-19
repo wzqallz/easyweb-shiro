@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class LoginRecordServiceImpl implements LoginRecordService {
@@ -26,7 +27,7 @@ public class LoginRecordServiceImpl implements LoginRecordService {
     @Override
     public PageResult<LoginRecord> list(int pageNum, int pageSize, String startDate, String endDate, String account) {
         Page<LoginRecord> page = new Page<>(pageNum, pageSize);
-        page.setRecords(loginRecordMapper.listFull(page, startDate, endDate, account));
-        return new PageResult<>(page.getTotal(), page.getRecords());
+        List<LoginRecord> records = loginRecordMapper.listFull(page, startDate, endDate, account);
+        return new PageResult<>(page.getTotal(), records);
     }
 }

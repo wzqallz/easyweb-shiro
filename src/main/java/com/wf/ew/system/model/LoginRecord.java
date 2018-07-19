@@ -6,28 +6,31 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.util.Date;
 
+/**
+ * 登录日志
+ */
 @TableName("sys_login_record")
 public class LoginRecord {
     @TableId
-    private String id;
+    private String id;  // 主键
 
-    private String userId;
+    private String userId;  // 用户id
 
-    private String osName;
+    private String osName;  // 操作系统
 
-    private String device;
+    private String device;  // 设备型号
 
-    private String browserType;
+    private String browserType;  // 浏览器类型
 
-    private String ipAddress;
+    private String ipAddress;  // ip地址
 
-    private Date createTime;
-
-    @TableField(exist = false)
-    private String nickName;
+    private Date createTime;  // 登录时间
 
     @TableField(exist = false)
-    private String username;
+    private String nickName;  // 用户昵称
+
+    @TableField(exist = false)
+    private String username;  // 用户账号
 
     public String getId() {
         return id;
