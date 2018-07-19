@@ -93,9 +93,7 @@ layui.define(['layer'], function (exports) {
                 data: data,
                 type: method,
                 dataType: 'json',
-                success: function (result, status, xhr) {
-                    success(result, status, xhr);
-                }
+                success: success(result, status, xhr)
             });
         },
         // 封装ajax请求
