@@ -18,6 +18,7 @@ import com.wf.ew.system.model.UserRole;
 import com.wf.ew.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,6 +72,7 @@ public class UserServiceImpl implements UserService {
         return new PageResult<>(userPage.getTotal(), userList);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean add(User user) throws BusinessException {
         String userId = UUIDUtil.randomUUID8();
@@ -91,6 +93,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean update(User user) {
         boolean rs = userMapper.updateById(user) > 0;

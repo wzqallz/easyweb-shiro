@@ -9,6 +9,7 @@ import com.wf.ew.system.model.RoleAuthorities;
 import com.wf.ew.system.service.AuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,12 +61,14 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
         return authoritiesMapper.updateById(authorities) > 0;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean delete(String authorityId) {
         roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("authority_id", authorityId));
         return authoritiesMapper.deleteById(authorityId) > 0;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean add(List<Authorities> authorities) {
         authoritiesMapper.delete(null);

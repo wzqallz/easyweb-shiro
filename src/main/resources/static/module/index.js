@@ -21,6 +21,8 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
                             menuName: menuName
                         });
                     });
+                } else {
+                    $(this).attr('href', 'javascript:;');
                 }
             });
             // 主页

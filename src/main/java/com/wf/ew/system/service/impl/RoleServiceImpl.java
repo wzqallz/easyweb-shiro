@@ -12,6 +12,7 @@ import com.wf.ew.system.model.UserRole;
 import com.wf.ew.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,7 @@ public class RoleServiceImpl implements RoleService {
         return roleMapper.updateById(role) > 0;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateState(String roleId, int isDelete) {
         if (isDelete != 0 && isDelete != 1) {
