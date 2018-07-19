@@ -10,11 +10,19 @@
       ) order by order_number asc
     </select>
 
-    <select id="listByRoleId" resultType="java.lang.String">
+    <select id="listByRoleIds" resultType="com.wf.ew.system.model.Authorities">
+        select * from sys_authorities where authority_id in (
         select authority_id from sys_role_authorities where role_id in (
         <foreach collection="roleIds" separator="," item="roleId">
             #{roleId}
         </foreach>
+        )
+        )
+    </select>
+
+    <select id="listByRoleId" resultType="com.wf.ew.system.model.Authorities">
+        select * from sys_authorities where authority_id in (
+          select authority_id from sys_role_authorities where role_id = #{roleId}
         )
     </select>
 </mapper>

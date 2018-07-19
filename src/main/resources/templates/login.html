@@ -95,7 +95,7 @@
             layer.load(2);
             $.post('login', obj.field, function (data) {
                 if (200 == data.code) {
-                    layer.msg('登录成功', {icon: 1}, function () {
+                    layer.msg('登录成功', {icon: 1, time: 1500}, function () {
                         location.replace('./');
                     });
                 } else {
