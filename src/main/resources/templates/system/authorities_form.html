@@ -1,6 +1,6 @@
 <!-- user表单弹窗 -->
 <form id="authoritie-form" lay-filter="authoritie-form" class="layui-form model-form">
-    <input name="userId" type="hidden"/>
+    <input name="authorityId" type="hidden"/>
     <div class="layui-form-item">
         <label class="layui-form-label">权限名称</label>
         <div class="layui-input-block">
@@ -28,12 +28,18 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">排序号</label>
+        <div class="layui-input-block">
+            <input name="orderNumber" placeholder="请输入排序号" type="number" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">上级菜单</label>
         <div class="layui-input-block">
             <select name="parentId">
                 <option value="-1">--请选择--</option>
                 <% for(authoritie in authorities) { %>
-                <option value="${authoritie.authority}">${authoritie.authorityName}</option>
+                <option value="${authoritie.authorityId}">${authoritie.authorityName}</option>
                 <% } %>
             </select>
         </div>
@@ -56,6 +62,7 @@
         var url = 'system/authorities/add';
         // 回显user数据
         var authoritie = admin.getTempData('t_authoritie');
+        authoritie.isMenu = authoritie.isMenu.toString();
         if (authoritie) {
             url = 'system/authorities/update';
             form.val('authoritie-form', authoritie);

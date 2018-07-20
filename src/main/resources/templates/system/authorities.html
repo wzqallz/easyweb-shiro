@@ -36,16 +36,21 @@
             url: 'system/authorities/list',
             page: false,
             cols: [[
-                {field: 'authorityId', title: '权限id'},
+                {type: 'numbers'},
                 {field: 'authorityName', title: '权限名称'},
                 {field: 'authority', title: '权限url'},
                 {field: 'parentId', title: '上级目录'},
+                {field: 'orderNumber', title: '排序号'},
                 {
                     field: 'isMenu', templet: function (d) {
+                        if (d.isMenu == 1) {
+                            return '<span class="layui-badge layui-bg-gray">按钮</span>';
+                        }
                         if (d.parentId == -1 || !d.authority) {
                             return '<span class="layui-badge layui-bg-blue">目录</span>';
+                        } else {
+                            return '<span class="layui-badge-rim">菜单</span>';
                         }
-                        return d.isMenu == 0 ? '<span class="layui-badge-rim">菜单</span>' : '<span class="layui-badge layui-bg-gray">按钮</span>';
                     }, title: '类型'
                 },
                 {
@@ -68,7 +73,7 @@
                 layer.confirm('确定删除此菜单吗？', function () {
                     layer.load(2);
                     $.post('system/authorities/delete', {
-                        authority: obj.data.authority
+                        authorityId: obj.data.authorityId
                     }, function (data) {
                         layer.closeAll('loading');
                         if (data.code == 200) {

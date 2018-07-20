@@ -78,7 +78,7 @@ public class AuthoritiesController extends BaseController {
         if (authoritiesService.add(authorities)) {
             return JsonResult.ok("添加成功");
         }
-        return JsonResult.ok("添加失败");
+        return JsonResult.error("添加失败");
     }
 
     /**
@@ -91,7 +91,7 @@ public class AuthoritiesController extends BaseController {
         if (authoritiesService.update(authorities)) {
             return JsonResult.ok("修改成功");
         }
-        return JsonResult.ok("修改失败");
+        return JsonResult.error("修改失败");
     }
 
     /**
@@ -104,7 +104,7 @@ public class AuthoritiesController extends BaseController {
         if (authoritiesService.delete(authorityId)) {
             return JsonResult.ok("删除成功");
         }
-        return JsonResult.ok("删除失败");
+        return JsonResult.error("删除失败");
     }
 
     /**

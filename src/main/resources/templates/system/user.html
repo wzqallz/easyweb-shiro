@@ -64,8 +64,7 @@
                 {field: 'sex', sort: true, title: '性别'},
                 {
                     sort: true, templet: function (d) {
-                        console.log(d.createTime);
-                        return util.toDateString(new Date(d.createTime));
+                        return util.toDateString(d.createTime);
                     }, title: '创建时间'
                 },
                 {field: 'state', sort: true, templet: '#user-tpl-state', title: '状态'},
