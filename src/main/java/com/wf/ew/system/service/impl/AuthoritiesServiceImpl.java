@@ -1,6 +1,7 @@
 package com.wf.ew.system.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.wf.ew.common.exception.BusinessException;
 import com.wf.ew.common.utils.UUIDUtil;
 import com.wf.ew.system.dao.AuthoritiesMapper;
 import com.wf.ew.system.dao.RoleAuthoritiesMapper;
@@ -30,6 +31,11 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     @Override
     public List<Authorities> list() {
         return authoritiesMapper.selectList(new EntityWrapper<Authorities>().orderBy("order_number", true));
+    }
+
+    @Override
+    public List<Authorities> listMenu() {
+        return authoritiesMapper.selectList(new EntityWrapper<Authorities>().eq("is_menu", 0).orderBy("order_number", true));
     }
 
     @Override
@@ -75,6 +81,18 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     @Override
     public boolean deleteRoleAuth(Integer roleId, Integer authId) {
         return roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("role_id", roleId).eq("authority_id", authId)) > 0;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean updateRoleAuth(Integer roleId, List<Integer> authIds) {
+        roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("role_id", roleId));
+        if (authIds != null && authIds.size() > 0) {
+            if (roleAuthoritiesMapper.insertRoleAuths(roleId, authIds) < authIds.size()) {
+                throw new BusinessException("操作失败");
+            }
+        }
+        return true;
     }
 
 }

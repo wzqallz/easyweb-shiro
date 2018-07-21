@@ -68,9 +68,9 @@
         var url = 'system/authorities/add';
         // 回显user数据
         var authoritie = admin.getTempData('t_authoritie');
-        authoritie.isMenu = authoritie.isMenu.toString();
         if (authoritie) {
             url = 'system/authorities/update';
+            authoritie.isMenu = authoritie.isMenu.toString();
             form.val('authoritie-form', authoritie);
         }
 

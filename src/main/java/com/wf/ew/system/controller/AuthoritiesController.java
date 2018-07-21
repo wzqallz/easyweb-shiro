@@ -39,7 +39,7 @@ public class AuthoritiesController extends BaseController {
 
     @RequestMapping("editForm")
     public String editForm(Model model) {
-        List<Authorities> authorities = authoritiesService.list();
+        List<Authorities> authorities = authoritiesService.listMenu();
         model.addAttribute("authorities", authorities);
         return "system/authorities_form.html";
     }

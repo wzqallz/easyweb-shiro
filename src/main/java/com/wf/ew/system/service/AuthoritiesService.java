@@ -10,6 +10,8 @@ public interface AuthoritiesService {
 
     List<Authorities> list();
 
+    List<Authorities> listMenu();
+
     List<Authorities> listByRoleIds(List<Integer> roleId);
 
     List<Authorities> listByRoleId(Integer roleId);
@@ -23,4 +25,6 @@ public interface AuthoritiesService {
     boolean addRoleAuth(Integer roleId, Integer authId);
 
     boolean deleteRoleAuth(Integer roleId, Integer authId);
+
+    boolean updateRoleAuth(Integer roleId, List<Integer> authIds);
 }

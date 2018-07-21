@@ -34,6 +34,10 @@ public class StringUtil {
         return !isBlank(str);
     }
 
+    public static String getStr(String str) {
+        return str == null ? "" : str;
+    }
+
     public static boolean contains(String str, String key) {
         if (str != null && str.contains(key)) {
             return true;

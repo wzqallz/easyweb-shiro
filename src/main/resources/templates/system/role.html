@@ -119,13 +119,14 @@
                     });
                 });
             } else if (obj.event === 'auth') {  // 权限管理
-                layer.open({
+                showPermDialog(obj.data.roleId);
+                /*layer.open({
                     type: 2,
                     title: '权限管理',
                     area: ['580px', '400px'],
                     offset: '120px',
                     content: 'system/role/auth?roleId=' + obj.data.roleId
-                });
+                });*/
             }
         });
 
@@ -157,6 +158,55 @@
             });
         };
 
+        // 权限管理
+        var showPermDialog = function (roleId) {
+            layer.open({
+                type: 1,
+                title: '权限管理',
+                area: ['450px', '380px'],
+                offset: '120px',
+                content: '<ul id="treeAuth" class="ztree" style="padding: 25px 0px 20px 60px;"></ul>',
+                btn: ['保存', '关闭'],
+                btnAlign: 'c',
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow-y', 'auto');
+                    layer.load(2);
+                    var setting = {
+                        check: {enable: true},
+                        data: {
+                            simpleData: {enable: true}
+                        }
+                    };
+                    $.get('system/role/authTree', {
+                        roleId: roleId
+                    }, function (data) {
+                        $.fn.zTree.init($('#treeAuth'), setting, data);
+                        layer.closeAll('loading');
+                    }, 'json');
+                },
+                yes: function (index) {
+                    layer.load(1);
+                    var treeObj = $.fn.zTree.getZTreeObj('treeAuth');
+                    var nodes = treeObj.getCheckedNodes(true);
+                    var ids = new Array();
+                    for (var i = 0; i < nodes.length; i++) {
+                        ids[i] = nodes[i].id;
+                    }
+                    $.post('system/role/updateRoleAuth', {
+                        roleId: roleId,
+                        authIds: JSON.stringify(ids)
+                    }, function (data) {
+                        layer.closeAll('loading');
+                        if (200 == data.code) {
+                            layer.msg(data.msg, {icon: 1});
+                            layer.close(index);
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }, 'json');
+                }
+            });
+        }
     });
 
 </script>

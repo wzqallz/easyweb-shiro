@@ -115,6 +115,7 @@ layui.define(['layer'], function (exports) {
                         return;
                     } else if (jsonRs.code == 403) {
                         layer.msg(jsonRs.msg, {icon: 2});
+                        layer.closeAll('loading');
                         return;
                     }
                 }
