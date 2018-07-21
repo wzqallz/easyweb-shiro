@@ -23,7 +23,7 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     private RoleAuthoritiesMapper roleAuthoritiesMapper;
 
     @Override
-    public List<Authorities> listByUserId(String userId) {
+    public List<Authorities> listByUserId(Integer userId) {
         return authoritiesMapper.listByUserId(userId);
     }
 
@@ -33,7 +33,7 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     }
 
     @Override
-    public List<Authorities> listByRoleIds(List<String> roleIds) {
+    public List<Authorities> listByRoleIds(List<Integer> roleIds) {
         if (roleIds == null || roleIds.size() == 0) {
             return new ArrayList<>();
         }
@@ -41,13 +41,12 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     }
 
     @Override
-    public List<Authorities> listByRoleId(String roleId) {
+    public List<Authorities> listByRoleId(Integer roleId) {
         return authoritiesMapper.listByRoleId(roleId);
     }
 
     @Override
     public boolean add(Authorities authorities) {
-        authorities.setAuthorityId(UUIDUtil.randomUUID8());
         authorities.setCreateTime(new Date());
         return authoritiesMapper.insert(authorities) > 0;
     }
@@ -59,15 +58,14 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean delete(String authorityId) {
+    public boolean delete(Integer authorityId) {
         roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("authority_id", authorityId));
         return authoritiesMapper.deleteById(authorityId) > 0;
     }
 
     @Override
-    public boolean addRoleAuth(String roleId, String authId) {
+    public boolean addRoleAuth(Integer roleId, Integer authId) {
         RoleAuthorities roleAuthorities = new RoleAuthorities();
-        roleAuthorities.setId(UUIDUtil.randomUUID8());
         roleAuthorities.setRoleId(roleId);
         roleAuthorities.setAuthorityId(authId);
         roleAuthorities.setCreateTime(new Date());
@@ -75,7 +73,7 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     }
 
     @Override
-    public boolean deleteRoleAuth(String roleId, String authId) {
+    public boolean deleteRoleAuth(Integer roleId, Integer authId) {
         return roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("role_id", roleId).eq("authority_id", authId)) > 0;
     }
 

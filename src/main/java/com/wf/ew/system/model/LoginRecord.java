@@ -12,9 +12,9 @@ import java.util.Date;
 @TableName("sys_login_record")
 public class LoginRecord {
     @TableId
-    private String id;  // 主键
+    private Integer id;  // 主键
 
-    private String userId;  // 用户id
+    private Integer userId;  // 用户id
 
     private String osName;  // 操作系统
 
@@ -32,20 +32,20 @@ public class LoginRecord {
     @TableField(exist = false)
     private String username;  // 用户账号
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getOsName() {

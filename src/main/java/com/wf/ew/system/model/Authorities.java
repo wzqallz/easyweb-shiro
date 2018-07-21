@@ -11,17 +11,19 @@ import java.util.Date;
 @TableName("sys_authorities")
 public class Authorities {
     @TableId
-    private String authorityId;  // 权限id
+    private Integer authorityId;  // 权限id
 
     private String authorityName;  // 权限名称
 
-    private String authority;  // 权限标识（菜单url，如果为空不会添加在shiro的权限列表中）
+    private String authority;  // 权限标识（如果为空不会添加在shiro的权限列表中）
 
-    private String parentId;  // 上级菜单
+    private String menuUrl;  // 菜单url
 
-    private int isMenu;  // 菜单还是按钮（菜单会显示在侧导航，按钮不会显示在侧导航，只要url不是空，都会作为权限标识）
+    private Integer parentId;  // 上级菜单
 
-    private int orderNumber;  // 排序号
+    private Integer isMenu;  // 菜单还是按钮（菜单会显示在侧导航，按钮不会显示在侧导航，只要url不是空，都会作为权限标识）
+
+    private Integer orderNumber;  // 排序号
 
     private String menuIcon;  // 菜单图标
 
@@ -37,6 +39,14 @@ public class Authorities {
         this.authority = authority;
     }
 
+    public String getMenuUrl() {
+        return menuUrl;
+    }
+
+    public void setMenuUrl(String menuUrl) {
+        this.menuUrl = menuUrl;
+    }
+
     public String getAuthorityName() {
         return authorityName;
     }
@@ -45,35 +55,35 @@ public class Authorities {
         this.authorityName = authorityName;
     }
 
-    public String getAuthorityId() {
+    public Integer getAuthorityId() {
         return authorityId;
     }
 
-    public void setAuthorityId(String authorityId) {
+    public void setAuthorityId(Integer authorityId) {
         this.authorityId = authorityId;
     }
 
-    public String getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 
-    public int getIsMenu() {
+    public Integer getIsMenu() {
         return isMenu;
     }
 
-    public void setIsMenu(int isMenu) {
+    public void setIsMenu(Integer isMenu) {
         this.isMenu = isMenu;
     }
 
-    public int getOrderNumber() {
+    public Integer getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(int orderNumber) {
+    public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
     }
 

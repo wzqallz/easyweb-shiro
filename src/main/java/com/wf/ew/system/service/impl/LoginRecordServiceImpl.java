@@ -19,7 +19,6 @@ public class LoginRecordServiceImpl implements LoginRecordService {
 
     @Override
     public boolean add(LoginRecord loginRecord) {
-        loginRecord.setId(UUIDUtil.randomUUID8());
         loginRecord.setCreateTime(new Date());
         return loginRecordMapper.insert(loginRecord) > 0;
     }

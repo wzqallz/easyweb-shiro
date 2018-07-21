@@ -24,7 +24,7 @@ public class RoleServiceImpl implements RoleService {
     private RoleAuthoritiesMapper roleAuthoritiesMapper;
 
     @Override
-    public List<Role> getByUserId(String userId) {
+    public List<Role> getByUserId(Integer userId) {
         return roleMapper.selectByUserId(userId);
     }
 
@@ -39,7 +39,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public boolean add(Role role) {
-        role.setRoleId(UUIDUtil.randomUUID8());
         role.setCreateTime(new Date());
         return roleMapper.insert(role) > 0;
     }
@@ -51,7 +50,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean updateState(String roleId, int isDelete) {
+    public boolean updateState(Integer roleId, int isDelete) {
         if (isDelete != 0 && isDelete != 1) {
             throw new ParameterException("isDelete值需要在[0,1]中");
         }
@@ -68,12 +67,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role getById(String roleId) {
+    public Role getById(Integer roleId) {
         return roleMapper.selectById(roleId);
     }
 
     @Override
-    public boolean delete(String roleId) {
+    public boolean delete(Integer roleId) {
         return roleMapper.deleteById(roleId) > 0;
     }
 }

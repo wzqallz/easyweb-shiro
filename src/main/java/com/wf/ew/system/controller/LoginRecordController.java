@@ -20,7 +20,7 @@ public class LoginRecordController {
     @Autowired
     private LoginRecordService loginRecordService;
 
-    @RequiresPermissions("system/loginRecord")
+    @RequiresPermissions("loginRecord:view")
     @RequestMapping()
     public String loginRecord() {
         return "system/login_record.html";
@@ -29,7 +29,7 @@ public class LoginRecordController {
     /**
      * 查询所有登录日志
      **/
-    @RequiresPermissions("system/loginRecord/list")
+    @RequiresPermissions("loginRecord:view")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<LoginRecord> list(Integer page, Integer limit, String startDate, String endDate, String account) {

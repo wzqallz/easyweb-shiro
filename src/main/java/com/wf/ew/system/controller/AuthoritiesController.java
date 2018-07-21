@@ -29,7 +29,7 @@ public class AuthoritiesController extends BaseController {
     @Autowired
     private RoleService roleService;
 
-    @RequiresPermissions("system/authorities")
+    @RequiresPermissions("authorities:view")
     @RequestMapping()
     public String authorities(Model model) {
         List<Role> roles = roleService.list(false);
@@ -47,10 +47,10 @@ public class AuthoritiesController extends BaseController {
     /**
      * 查询所有权限
      **/
-    @RequiresPermissions("system/authorities/list")
+    @RequiresPermissions("authorities:view")
     @ResponseBody
     @RequestMapping("/list")
-    public PageResult<Map<String, Object>> list(String roleId) {
+    public PageResult<Map<String, Object>> list(Integer roleId) {
         List<Map<String, Object>> maps = new ArrayList<>();
         List<Authorities> authorities = authoritiesService.list();
         List<Authorities> roleAuths = authoritiesService.listByRoleId(roleId);
@@ -71,7 +71,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 添加权限
      */
-    @RequiresPermissions("system/authorities/add")
+    @RequiresPermissions("authorities:add")
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(Authorities authorities) {
@@ -84,7 +84,7 @@ public class AuthoritiesController extends BaseController {
     /**
      * 修改权限
      */
-    @RequiresPermissions("system/authorities/update")
+    @RequiresPermissions("authorities:edit")
     @ResponseBody
     @RequestMapping("/update")
     public JsonResult update(Authorities authorities) {
@@ -97,10 +97,10 @@ public class AuthoritiesController extends BaseController {
     /**
      * 删除权限
      */
-    @RequiresPermissions("system/authorities/delete")
+    @RequiresPermissions("authorities:delete")
     @ResponseBody
     @RequestMapping("/delete")
-    public JsonResult delete(String authorityId) {
+    public JsonResult delete(Integer authorityId) {
         if (authoritiesService.delete(authorityId)) {
             return JsonResult.ok("删除成功");
         }
@@ -110,10 +110,10 @@ public class AuthoritiesController extends BaseController {
     /**
      * 给角色添加权限
      **/
-    @RequiresPermissions("system/authorities/addRoleAuth")
+    @RequiresPermissions("role:auth")
     @ResponseBody
     @RequestMapping("/addRoleAuth")
-    public JsonResult addRoleAuth(String roleId, String authId) {
+    public JsonResult addRoleAuth(Integer roleId, Integer authId) {
         if (authoritiesService.addRoleAuth(roleId, authId)) {
             return JsonResult.ok();
         }
@@ -123,10 +123,10 @@ public class AuthoritiesController extends BaseController {
     /**
      * 移除角色权限
      **/
-    @RequiresPermissions("system/authorities/deleteRoleAuth")
+    @RequiresPermissions("role:auth")
     @ResponseBody
     @RequestMapping("/deleteRoleAuth")
-    public JsonResult deleteRoleAuth(String roleId, String authId) {
+    public JsonResult deleteRoleAuth(Integer roleId, Integer authId) {
         if (authoritiesService.deleteRoleAuth(roleId, authId)) {
             return JsonResult.ok();
         }

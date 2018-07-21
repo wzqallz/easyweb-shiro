@@ -3,6 +3,7 @@ package com.wf.ew.system.controller;
 import com.wf.ew.common.BaseController;
 import com.wf.ew.common.JsonResult;
 import com.wf.ew.common.PageResult;
+import com.wf.ew.common.exception.ParameterException;
 import com.wf.ew.common.shiro.EndecryptUtil;
 import com.wf.ew.common.utils.StringUtil;
 import com.wf.ew.system.model.Role;
@@ -29,7 +30,7 @@ public class UserController extends BaseController {
     @Autowired
     private RoleService roleService;
 
-    @RequiresPermissions("system/user")
+    @RequiresPermissions("user:view")
     @RequestMapping
     public String user(Model model) {
         List<Role> roles = roleService.list(false);
@@ -47,7 +48,7 @@ public class UserController extends BaseController {
     /**
      * 查询用户列表
      */
-    @RequiresPermissions("system/user/list")
+    @RequiresPermissions("user:view")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<User> list(Integer page, Integer limit, String searchKey, String searchValue) {
@@ -64,21 +65,11 @@ public class UserController extends BaseController {
     /**
      * 添加用户
      **/
-    @RequiresPermissions("system/user/add")
+    @RequiresPermissions("user:add")
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(User user, String roleId) {
-        if (roleId.contains("SJ1UzsU9")) {
-            return JsonResult.error("不能添加超级管理员");
-        }
-        List<Role> roleIds = new ArrayList<>();
-        String[] split = roleId.split(",");
-        for (String t : split) {
-            Role role = new Role();
-            role.setRoleId(t);
-            roleIds.add(role);
-        }
-        user.setRoles(roleIds);
+        user.setRoles(getRoles(roleId));
         user.setPassword("123456");
         if (userService.add(user)) {
             return JsonResult.ok("添加成功");
@@ -90,21 +81,11 @@ public class UserController extends BaseController {
     /**
      * 修改用户
      **/
-    @RequiresPermissions("system/user/update")
+    @RequiresPermissions("user:edit")
     @ResponseBody
     @RequestMapping("/update")
     public JsonResult update(User user, String roleId) {
-        if (roleId.contains("SJ1UzsU9")) {
-            return JsonResult.error("不能添加超级管理员");
-        }
-        List<Role> roleIds = new ArrayList<>();
-        String[] split = roleId.split(",");
-        for (String t : split) {
-            Role role = new Role();
-            role.setRoleId(t);
-            roleIds.add(role);
-        }
-        user.setRoles(roleIds);
+        user.setRoles(getRoles(roleId));
         if (userService.update(user)) {
             return JsonResult.ok("修改成功");
         } else {
@@ -112,13 +93,25 @@ public class UserController extends BaseController {
         }
     }
 
+    private List<Role> getRoles(String roleStr) {
+        List<Role> roles = new ArrayList<>();
+        String[] split = roleStr.split(",");
+        for (String t : split) {
+            if (t.equals("1")) {
+                throw new ParameterException("不能添加超级管理员");
+            }
+            roles.add(new Role(Integer.parseInt(t)));
+        }
+        return roles;
+    }
+
     /**
      * 修改用户状态
      **/
-    @RequiresPermissions("system/user/updateState")
+    @RequiresPermissions("user:delete")
     @ResponseBody
     @RequestMapping("/updateState")
-    public JsonResult updateState(String userId, Integer state) {
+    public JsonResult updateState(Integer userId, Integer state) {
         if (userService.updateState(userId, state)) {
             return JsonResult.ok();
         } else {
@@ -135,11 +128,11 @@ public class UserController extends BaseController {
         if ("admin".equals(getLoginUserId())) {
             return JsonResult.error("演示账号关闭该功能");
         }
-        String finalSecret = EndecryptUtil.encrytMd5(oldPsw, getLoginUserId(), 3);
+        String finalSecret = EndecryptUtil.encrytMd5(oldPsw, getLoginUserName(), 3);
         if (!finalSecret.equals(getLoginUser().getPassword())) {
             return JsonResult.error("原密码输入不正确");
         }
-        if (userService.updatePsw(getLoginUserId(), newPsw)) {
+        if (userService.updatePsw(getLoginUserId(), getLoginUserName(), newPsw)) {
             return JsonResult.ok("修改成功");
         } else {
             return JsonResult.error("修改失败");
@@ -149,11 +142,12 @@ public class UserController extends BaseController {
     /**
      * 重置密码
      **/
-    @RequiresPermissions("system/user/restPsw")
+    @RequiresPermissions("user:edit")
     @ResponseBody
     @RequestMapping("/restPsw")
-    public JsonResult resetPsw(String userId) {
-        if (userService.updatePsw(userId, "123456")) {
+    public JsonResult resetPsw(Integer userId) {
+        User byId = userService.getById(userId);
+        if (userService.updatePsw(userId, byId.getUsername(), "123456")) {
             return JsonResult.ok("重置成功");
         } else {
             return JsonResult.error("重置失败");

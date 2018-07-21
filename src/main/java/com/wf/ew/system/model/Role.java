@@ -11,7 +11,7 @@ import java.util.Date;
 @TableName("sys_role")
 public class Role {
     @TableId
-    private String roleId;  // 角色id
+    private Integer roleId;  // 角色id
 
     private String roleName;  // 角色名称
 
@@ -26,17 +26,21 @@ public class Role {
     public Role() {
     }
 
-    public Role(String roleId, String roleName) {
+    public Role(Integer roleId) {
+        setRoleId(roleId);
+    }
+
+    public Role(Integer roleId, String roleName) {
         setRoleId(roleId);
         setRoleName(roleName);
     }
 
-    public String getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId == null ? null : roleId.trim();
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public String getRoleName() {

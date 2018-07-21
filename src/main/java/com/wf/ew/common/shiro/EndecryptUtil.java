@@ -31,5 +31,4 @@ public class EndecryptUtil {
         String password_cipherText = new Md5Hash(password, salt, hashIterations).toHex();
         return password_cipherText;
     }
-
 }

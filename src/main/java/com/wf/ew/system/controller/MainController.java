@@ -41,7 +41,7 @@ public class MainController extends BaseController implements ErrorController {
     @RequestMapping({"/", "/index"})
     public String index(Model model) {
         List<Authorities> authorities = authoritiesService.listByUserId(getLoginUserId());
-        List<Map<String, Object>> menuTree = getMenuTree(authorities, "-1");
+        List<Map<String, Object>> menuTree = getMenuTree(authorities, -1);
         model.addAttribute("menus", menuTree);
         model.addAttribute("login_user", getLoginUser());
         return "index.html";
@@ -128,15 +128,15 @@ public class MainController extends BaseController implements ErrorController {
     /**
      * 递归转化树形菜单
      */
-    private List<Map<String, Object>> getMenuTree(List<Authorities> authorities, String parentId) {
+    private List<Map<String, Object>> getMenuTree(List<Authorities> authorities, Integer parentId) {
         List<Map<String, Object>> list = new ArrayList<>();
         for (int i = 0; i < authorities.size(); i++) {
             Authorities temp = authorities.get(i);
-            if (temp.getIsMenu() == 0 && parentId.equals(temp.getParentId())) {
+            if (temp.getIsMenu() == 0 && parentId == temp.getParentId()) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("menuName", temp.getAuthorityName());
                 map.put("menuIcon", temp.getMenuIcon());
-                map.put("menuUrl", StringUtil.isBlank(temp.getAuthority()) ? "javascript:;" : temp.getAuthority());
+                map.put("menuUrl", StringUtil.isBlank(temp.getMenuUrl()) ? "javascript:;" : temp.getMenuUrl());
                 map.put("subMenus", getMenuTree(authorities, authorities.get(i).getAuthorityId()));
                 list.add(map);
             }
@@ -147,15 +147,15 @@ public class MainController extends BaseController implements ErrorController {
     /**
      * 添加登录日志
      */
-    private void addLoginRecord(String userId, HttpServletRequest request) {
+    private void addLoginRecord(Integer userId, HttpServletRequest request) {
         UserAgentGetter agentGetter = new UserAgentGetter(request);
         // 添加到登录日志
         LoginRecord loginRecord = new LoginRecord();
         loginRecord.setUserId(userId);
-        loginRecord.setIpAddress(agentGetter.getIpAddr());
+        loginRecord.setOsName(agentGetter.getOS());
         loginRecord.setDevice(agentGetter.getDevice());
         loginRecord.setBrowserType(agentGetter.getBrowser());
-        loginRecord.setOsName(agentGetter.getOS());
+        loginRecord.setIpAddress(agentGetter.getIpAddr());
         loginRecordService.add(loginRecord);
     }
 

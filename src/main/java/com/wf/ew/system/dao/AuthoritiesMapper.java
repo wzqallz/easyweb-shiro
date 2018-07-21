@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface AuthoritiesMapper extends BaseMapper<Authorities> {
 
-    List<Authorities> listByUserId(String userId);
+    List<Authorities> listByUserId(Integer userId);
 
-    List<Authorities> listByRoleIds(@Param("roleIds") List<String> roleIds);
+    List<Authorities> listByRoleIds(@Param("roleIds") List<Integer> roleIds);
 
-    List<Authorities> listByRoleId(String roleId);
+    List<Authorities> listByRoleId(Integer roleId);
 }

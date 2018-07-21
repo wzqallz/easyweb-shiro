@@ -22,7 +22,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @RequiresPermissions("system/role")
+    @RequiresPermissions("role:view")
     @RequestMapping()
     public String role() {
         return "system/role.html";
@@ -37,7 +37,7 @@ public class RoleController {
     /**
      * 查询所有角色
      **/
-    @RequiresPermissions("system/role/list")
+    @RequiresPermissions("role:view")
     @ResponseBody
     @RequestMapping("/list")
     public PageResult<Role> list(String keyword) {
@@ -47,7 +47,7 @@ public class RoleController {
             Iterator<Role> iterator = list.iterator();
             while (iterator.hasNext()) {
                 Role next = iterator.next();
-                boolean b = next.getRoleId().contains(keyword) || next.getRoleName().contains(keyword) || next.getComments().contains(keyword);
+                boolean b = String.valueOf(next.getRoleId()).contains(keyword) || next.getRoleName().contains(keyword) || next.getComments().contains(keyword);
                 if (!b) {
                     iterator.remove();
                 }
@@ -59,7 +59,7 @@ public class RoleController {
     /**
      * 添加角色
      **/
-    @RequiresPermissions("system/role/add")
+    @RequiresPermissions("role:add")
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(Role role) {
@@ -73,7 +73,7 @@ public class RoleController {
     /**
      * 修改角色
      **/
-    @RequiresPermissions("system/role/update")
+    @RequiresPermissions("role:edit")
     @ResponseBody
     @RequestMapping("/update")
     public JsonResult update(Role role) {
@@ -87,10 +87,10 @@ public class RoleController {
     /**
      * 删除角色
      **/
-    @RequiresPermissions("system/role/delete")
+    @RequiresPermissions("role:delete")
     @ResponseBody
     @RequestMapping("/delete")
-    public JsonResult delete(String roleId) {
+    public JsonResult delete(Integer roleId) {
         if (roleService.updateState(roleId, 1)) {
             return JsonResult.ok("删除成功");
         }

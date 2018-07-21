@@ -13,39 +13,39 @@ import java.util.Date;
 @TableName("sys_user_role")
 public class UserRole {
     @TableId
-    private String id;  // 主键
+    private Integer id;  // 主键
 
-    private String userId;  // 用户id
+    private Integer userId;  // 用户id
 
-    private String roleId;  // 角色id
+    private Integer roleId;  // 角色id
 
     private Date createTime;  // 创建时间
 
     @TableField(exist = true)
     private String roleName;  // 角色名称
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public String getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId == null ? null : roleId.trim();
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public Date getCreateTime() {

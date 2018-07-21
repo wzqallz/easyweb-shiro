@@ -11,7 +11,7 @@ import java.util.Date;
  * </p>
  */
 public class Person {
-    private String personId;  // 人员id
+    private Integer personId;  // 人员id
 
     private String trueName;  // 真实姓名
 
@@ -27,12 +27,12 @@ public class Person {
 
     private Date updateTime;  // 修改时间
 
-    public String getPersonId() {
+    public Integer getPersonId() {
         return personId;
     }
 
-    public void setPersonId(String personId) {
-        this.personId = personId == null ? null : personId.trim();
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 
     public String getTrueName() {

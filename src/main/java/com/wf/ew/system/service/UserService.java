@@ -11,16 +11,16 @@ public interface UserService {
 
     PageResult<User> list(int pageNum, int pageSize, boolean showDelete, String searchKey, String searchValue);
 
-    User getById(String userId);
+    User getById(Integer userId);
 
     boolean add(User user) throws BusinessException;
 
     boolean update(User user);
 
-    boolean updateState(String userId, int state) throws ParameterException;
+    boolean updateState(Integer userId, int state) throws ParameterException;
 
-    boolean updatePsw(String userId, String newPsw);
+    boolean updatePsw(Integer userId, String username, String newPsw);
 
-    boolean delete(String userId);
+    boolean delete(Integer userId);
 
 }

@@ -11,35 +11,35 @@ import java.util.Date;
 @TableName("sys_role_authorities")
 public class RoleAuthorities {
     @TableId
-    private String id;  // 主键，也可以用联合主键，根据个人习惯
+    private Integer id;  // 主键，也可以用联合主键，根据个人习惯
 
-    private String roleId;  // 角色id
+    private Integer roleId;  // 角色id
 
-    private String authorityId;  // 权限id
+    private Integer authorityId;  // 权限id
 
     private Date createTime;  // 添加时间
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId == null ? null : roleId.trim();
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
-    public String getAuthorityId() {
+    public Integer getAuthorityId() {
         return authorityId;
     }
 
-    public void setAuthorityId(String authorityId) {
+    public void setAuthorityId(Integer authorityId) {
         this.authorityId = authorityId;
     }
 

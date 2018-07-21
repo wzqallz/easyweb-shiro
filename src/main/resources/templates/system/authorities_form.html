@@ -9,9 +9,15 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">权限url</label>
+        <label class="layui-form-label">权限标识</label>
         <div class="layui-input-block">
-            <input name="authority" placeholder="请输入菜单url" type="text" class="layui-input"/>
+            <input name="authority" placeholder="请输入权限标识" type="text" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单url</label>
+        <div class="layui-input-block">
+            <input name="menuUrl" placeholder="请输入菜单url" type="text" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
@@ -21,10 +27,10 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">菜单类型</label>
+        <label class="layui-form-label">是否为菜单</label>
         <div class="layui-input-block">
-            <input type="radio" name="isMenu" value="0" title="菜单" checked/>
-            <input type="radio" name="isMenu" value="1" title="按钮"/>
+            <input type="radio" name="isMenu" value="0" title="是" checked/>
+            <input type="radio" name="isMenu" value="1" title="否"/>
         </div>
     </div>
     <div class="layui-form-item">

@@ -32,6 +32,8 @@ public class MyExceptionHandler {
         } else {
             String message = ex.getMessage();
             map.put("code", 500);
+            //map.put("msg", "系统繁忙");
+            // 开发阶段建议错误信息直接放在msg中，生产版本建议把错误信息放在details中，msg提示系统繁忙即可
             map.put("msg", message == null || message.trim().isEmpty() ? "系统繁忙" : message);
             map.put("details", message);
             logger.error(ex.getMessage(), ex);

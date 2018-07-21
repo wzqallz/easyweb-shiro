@@ -58,6 +58,7 @@
         // 回显user数据
         var user = admin.getTempData('t_user');
         if (user) {
+            $('input[name="username"]').attr('readonly', 'readonly');
             url = 'system/user/update';
             form.val('user-form', user);
             var rds = new Array();

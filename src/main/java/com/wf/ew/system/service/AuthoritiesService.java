@@ -6,21 +6,21 @@ import java.util.List;
 
 public interface AuthoritiesService {
 
-    List<Authorities> listByUserId(String userId);
+    List<Authorities> listByUserId(Integer userId);
 
     List<Authorities> list();
 
-    List<Authorities> listByRoleIds(List<String> roleId);
+    List<Authorities> listByRoleIds(List<Integer> roleId);
 
-    List<Authorities> listByRoleId(String roleId);
+    List<Authorities> listByRoleId(Integer roleId);
 
     boolean add(Authorities authorities);
 
     boolean update(Authorities authorities);
 
-    boolean delete(String authorityId);
+    boolean delete(Integer authorityId);
 
-    boolean addRoleAuth(String roleId, String authId);
+    boolean addRoleAuth(Integer roleId, Integer authId);
 
-    boolean deleteRoleAuth(String roleId, String authId);
+    boolean deleteRoleAuth(Integer roleId, Integer authId);
 }

@@ -6,18 +6,18 @@ import java.util.List;
 
 public interface RoleService {
 
-    List<Role> getByUserId(String userId);
+    List<Role> getByUserId(Integer userId);
 
     List<Role> list(boolean showDelete);
 
-    Role getById(String roleId);
+    Role getById(Integer roleId);
 
     boolean add(Role role);
 
     boolean update(Role role);
 
-    boolean updateState(String roleId, int isDelete);  // 逻辑删除
+    boolean updateState(Integer roleId, int isDelete);  // 逻辑删除
 
-    boolean delete(String roleId);  // 物理删除
+    boolean delete(Integer roleId);  // 物理删除
 
 }

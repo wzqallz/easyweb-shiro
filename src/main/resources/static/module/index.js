@@ -62,6 +62,7 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
                 admin.rollPage('auto');
                 // 切换tab关闭表格内浮窗
                 $('.layui-table-tips-c').trigger('click');
+                admin.removeLoading('.layui-layout-admin .layui-body');
                 // 解决切换tab滚动条时而消失的问题
                 var $iframe = $('.layui-layout-admin .layui-body .layui-tab-content .layui-tab-item.layui-show .admin-iframe')[0];
                 if ($iframe) {

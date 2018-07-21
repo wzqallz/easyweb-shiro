@@ -40,7 +40,7 @@ public class UserRealm extends AuthorizingRealm {
         List<Role> userRoles = roleService.getByUserId(user.getUserId());
         Set<String> roles = new HashSet<>();
         for (int i = 0; i < userRoles.size(); i++) {
-            roles.add(userRoles.get(i).getRoleId());
+            roles.add(String.valueOf(userRoles.get(i).getRoleId()));
         }
         authorizationInfo.setRoles(roles);
         // 权限
@@ -66,7 +66,7 @@ public class UserRealm extends AuthorizingRealm {
         if (user.getState() != 0) {
             throw new LockedAccountException();  // 账号被锁定
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getUserId()), getName());
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getUsername()), getName());
         return authenticationInfo;
     }
 }

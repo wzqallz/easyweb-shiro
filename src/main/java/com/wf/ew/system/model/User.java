@@ -13,7 +13,7 @@ import java.util.List;
 @TableName("sys_user")
 public class User {
     @TableId
-    private String userId;  // 主键id
+    private Integer userId;  // 主键id
 
     private String username;  // 账号
 
@@ -31,7 +31,7 @@ public class User {
 
     private Integer emailVerified;  // 邮箱是否验证
 
-    private String personId;  // 人员id，关联person表，如果是教学系统，则关联学生表和教师表
+    private Integer personId;  // 人员id，关联person表，如果是教学系统，则关联学生表和教师表
 
     private Integer personType;  // 人员类型，比如：0学生，1教师
 
@@ -44,11 +44,11 @@ public class User {
     @TableField(exist = false)
     private List<Role> roles;  //角色
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -116,11 +116,11 @@ public class User {
         this.emailVerified = emailVerified;
     }
 
-    public String getPersonId() {
+    public Integer getPersonId() {
         return personId;
     }
 
-    public void setPersonId(String personId) {
+    public void setPersonId(Integer personId) {
         this.personId = personId;
     }
 

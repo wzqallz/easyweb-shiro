@@ -8,7 +8,6 @@ import com.wf.ew.common.exception.BusinessException;
 import com.wf.ew.common.exception.ParameterException;
 import com.wf.ew.common.shiro.EndecryptUtil;
 import com.wf.ew.common.utils.StringUtil;
-import com.wf.ew.common.utils.UUIDUtil;
 import com.wf.ew.system.dao.UserMapper;
 import com.wf.ew.system.dao.UserRoleMapper;
 import com.wf.ew.system.model.Role;
@@ -66,14 +65,12 @@ public class UserServiceImpl implements UserService {
         if (userMapper.getByUsername(user.getUsername()) != null) {
             throw new BusinessException("账号已经存在");
         }
-        String userId = UUIDUtil.randomUUID8();
-        user.setUserId(userId);
-        user.setPassword(EndecryptUtil.encrytMd5(user.getPassword(), userId, 3));
+        user.setPassword(EndecryptUtil.encrytMd5(user.getPassword(), user.getUsername(), 3));
         user.setState(0);
         user.setCreateTime(new Date());
         boolean rs = userMapper.insert(user) > 0;
         if (rs) {
-            if (!addUserRole(userId, user.getRoles())) {
+            if (!addUserRole(user.getUserId(), user.getRoles())) {
                 throw new BusinessException("添加失败，请重试");
             }
         }
@@ -83,6 +80,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean update(User user) {
+        user.setUsername(null);
         boolean rs = userMapper.updateById(user) > 0;
         if (rs) {
             if (userRoleMapper.delete(new EntityWrapper().eq("user_id", user.getUserId())) <= 0) {
@@ -98,13 +96,12 @@ public class UserServiceImpl implements UserService {
     /**
      * 添加用户角色
      */
-    private boolean addUserRole(String userId, List<Role> roles) {
+    private boolean addUserRole(Integer userId, List<Role> roles) {
         if (roles == null || roles.size() <= 0) {
             return false;
         }
         for (Role role : roles) {
             UserRole userRole = new UserRole();
-            userRole.setId(UUIDUtil.randomUUID8());
             userRole.setUserId(userId);
             userRole.setRoleId(role.getRoleId());
             userRole.setCreateTime(new Date());
@@ -117,7 +114,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateState(String userId, int state) throws ParameterException {
+    public boolean updateState(Integer userId, int state) throws ParameterException {
         if (state != 0 && state != 1) {
             throw new ParameterException("state值需要在[0,1]中");
         }
@@ -128,25 +125,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updatePsw(String userId, String password) {
+    public boolean updatePsw(Integer userId, String username, String password) {
         User user = new User();
         user.setUserId(userId);
-        user.setPassword(EndecryptUtil.encrytMd5(password, userId, 3));
+        user.setPassword(EndecryptUtil.encrytMd5(password, username, 3));
         return userMapper.updateById(user) > 0;
     }
 
     @Override
-    public User getById(String userId) {
+    public User getById(Integer userId) {
         return userMapper.selectById(userId);
     }
 
     @Override
-    public boolean delete(String userId) {
+    public boolean delete(Integer userId) {
         return userMapper.deleteById(userId) > 0;
     }
 
-    private List<String> getUserIds(List<User> userList) {
-        List<String> userIds = new ArrayList<>();
+    private List<Integer> getUserIds(List<User> userList) {
+        List<Integer> userIds = new ArrayList<>();
         for (User one : userList) {
             userIds.add(one.getUserId());
         }
