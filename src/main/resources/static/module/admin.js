@@ -113,16 +113,14 @@ layui.define(['layer'], function (exports) {
                             location.replace('/login');
                         }, 1000);
                         return;
-                    } else if (jsonRs.code == 403) {
+                    } else if ('html' == paramdataType.toLowerCase() && jsonRs.code == 403) {
                         layer.msg(jsonRs.msg, {icon: 2});
-                        layer.closeAll('loading');
-                        return;
                     }
                 }
                 successCallback(result, status, xhr);
             };
             param.error = function (xhr) {
-                success({code: xhr.status, msg: xhr.statusText});
+                param.success({code: xhr.status, msg: xhr.statusText});
             };
             $.ajax(param);
         },
