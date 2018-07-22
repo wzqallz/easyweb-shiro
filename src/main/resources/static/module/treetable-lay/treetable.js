@@ -80,7 +80,7 @@ layui.define(['layer', 'table'], function (exports) {
                     $(param.elem).next().addClass('treeTable');
                     $('.treeTable .layui-table-page').css('display', 'none');
                     $('.treeTable .treeTable-icon').click(function () {
-                        treetable.toggleRows($(this));
+                        treetable.toggleRows($(this), param.treeLinkage);
                     });
                     if (param.treeDefaultClose) {
                         treetable.foldAll(param.elem);
@@ -111,7 +111,7 @@ layui.define(['layer', 'table'], function (exports) {
             return num + treetable.getEmptyNum(tPid, data);
         },
         // 展开/折叠行
-        toggleRows: function ($dom) {
+        toggleRows: function ($dom, linkage) {
             var type = $dom.attr('lay-ttype');
             if ('file' == type) {
                 return;
@@ -131,11 +131,14 @@ layui.define(['layer', 'table'], function (exports) {
                 if (mId == pid) {
                     if (isOpen) {
                         $(this).hide();
+                        if ('dir' == ttype && tOpen == isOpen) {
+                            $ti.trigger('click');
+                        }
                     } else {
                         $(this).show();
-                    }
-                    if ('dir' == ttype && tOpen == isOpen) {
-                        $ti.trigger('click');
+                        if (linkage && 'dir' == ttype && tOpen == isOpen) {
+                            $ti.trigger('click');
+                        }
                     }
                 }
             });
