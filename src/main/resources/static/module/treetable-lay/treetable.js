@@ -1,8 +1,3 @@
-/**
- * 基于layui的树形表格TreeTable
- * 项目地址：https://gitee.com/whvse/treetable-lay
- * 版本：V1.0.0
- */
 layui.define(['layer', 'table'], function (exports) {
     var $ = layui.jquery;
     var layer = layui.layer;
@@ -15,6 +10,7 @@ layui.define(['layer', 'table'], function (exports) {
             if (!treetable.checkParam(param)) {
                 return;
             }
+            var doneCallback = param.done;
             // 获取数据
             var mData = [];
             $.getJSON(param.url, param.where, function (res) {
@@ -86,6 +82,12 @@ layui.define(['layer', 'table'], function (exports) {
                     $('.treeTable .treeTable-icon').click(function () {
                         treetable.toggleRows($(this));
                     });
+                    if (param.treeDefaultClose) {
+                        treetable.foldAll(param.elem);
+                    }
+                    if (doneCallback) {
+                        doneCallback(res, curr, count);
+                    }
                 };
 
                 // 渲染表格

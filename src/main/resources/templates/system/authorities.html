@@ -34,35 +34,39 @@
         var treetable = layui.treetable;
 
         // 渲染表格
-        treetable.render({
-            treeColIndex: 1,
-            treeSpid: -1,
-            treeIdName: 'authorityId',
-            treePidName: 'parentId',
-            elem: '#auth-table',
-            url: 'system/authorities/list',
-            page: false,
-            cols: [[
-                {type: 'numbers'},
-                {field: 'authorityName', minWidth: 200, title: '权限名称'},
-                {field: 'authority', title: '权限标识'},
-                {field: 'menuUrl', title: '菜单url'},
-                {field: 'orderNumber', width: 80, align: 'center', title: '排序号'},
-                {
-                    field: 'isMenu', width: 80, align: 'center', templet: function (d) {
-                        if (d.isMenu == 1) {
-                            return '<span class="layui-badge layui-bg-gray">按钮</span>';
-                        }
-                        if (d.parentId == -1) {
-                            return '<span class="layui-badge layui-bg-blue">目录</span>';
-                        } else {
-                            return '<span class="layui-badge-rim">菜单</span>';
-                        }
-                    }, title: '类型'
-                },
-                {templet: '#auth-state', width: 120, align: 'center', title: '操作'}
-            ]]
-        });
+        var renderTable = function () {
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: -1,
+                treeIdName: 'authorityId',
+                treePidName: 'parentId',
+                elem: '#auth-table',
+                url: 'system/authorities/list',
+                page: false,
+                cols: [[
+                    {type: 'numbers'},
+                    {field: 'authorityName', minWidth: 200, title: '权限名称'},
+                    {field: 'authority', title: '权限标识'},
+                    {field: 'menuUrl', title: '菜单url'},
+                    {field: 'orderNumber', width: 80, align: 'center', title: '排序号'},
+                    {
+                        field: 'isMenu', width: 80, align: 'center', templet: function (d) {
+                            if (d.isMenu == 1) {
+                                return '<span class="layui-badge layui-bg-gray">按钮</span>';
+                            }
+                            if (d.parentId == -1) {
+                                return '<span class="layui-badge layui-bg-blue">目录</span>';
+                            } else {
+                                return '<span class="layui-badge-rim">菜单</span>';
+                            }
+                        }, title: '类型'
+                    },
+                    {templet: '#auth-state', width: 120, align: 'center', title: '操作'}
+                ]]
+            });
+        };
+
+        renderTable();
 
         // 工具条点击事件
         table.on('tool(auth-table)', function (obj) {
@@ -80,7 +84,7 @@
                         layer.closeAll('loading');
                         if (data.code == 200) {
                             layer.msg(data.msg, {icon: 1});
-                            obj.del();
+                            renderTable();
                         } else {
                             layer.msg(data.msg, {icon: 2});
                         }
@@ -102,7 +106,7 @@
                 title: title,
                 path: 'system/authorities/editForm',
                 finish: function () {
-                    table.reload('auth-table', {});
+                    renderTable();
                 }
             });
         };
