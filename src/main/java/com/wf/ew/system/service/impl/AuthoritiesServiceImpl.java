@@ -65,8 +65,15 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean delete(Integer authorityId) {
+        List<Authorities> childs = authoritiesMapper.selectList(new EntityWrapper<Authorities>().eq("parent_id", authorityId));
+        if (childs != null && childs.size() > 0) {
+            throw new BusinessException("请先删除子节点");
+        }
         roleAuthoritiesMapper.delete(new EntityWrapper<RoleAuthorities>().eq("authority_id", authorityId));
-        return authoritiesMapper.deleteById(authorityId) > 0;
+        if (authoritiesMapper.deleteById(authorityId) <= 0) {
+            throw new BusinessException("删除失败，请重试");
+        }
+        return true;
     }
 
     @Override

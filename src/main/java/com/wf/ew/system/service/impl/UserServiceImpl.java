@@ -70,7 +70,8 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(new Date());
         boolean rs = userMapper.insert(user) > 0;
         if (rs) {
-            if (!addUserRole(user.getUserId(), user.getRoles())) {
+            List<Integer> roleIds = getRoleIds(user.getRoles());
+            if (userRoleMapper.insertBatch(user.getUserId(), roleIds) < roleIds.size()) {
                 throw new BusinessException("添加失败，请重试");
             }
         }
@@ -83,10 +84,9 @@ public class UserServiceImpl implements UserService {
         user.setUsername(null);
         boolean rs = userMapper.updateById(user) > 0;
         if (rs) {
-            if (userRoleMapper.delete(new EntityWrapper().eq("user_id", user.getUserId())) <= 0) {
-                throw new BusinessException("修改失败，请重试");
-            }
-            if (!addUserRole(user.getUserId(), user.getRoles())) {
+            userRoleMapper.delete(new EntityWrapper().eq("user_id", user.getUserId()));
+            List<Integer> roleIds = getRoleIds(user.getRoles());
+            if (userRoleMapper.insertBatch(user.getUserId(), roleIds) < roleIds.size()) {
                 throw new BusinessException("修改失败，请重试");
             }
         }
@@ -96,21 +96,14 @@ public class UserServiceImpl implements UserService {
     /**
      * 添加用户角色
      */
-    private boolean addUserRole(Integer userId, List<Role> roles) {
-        if (roles == null || roles.size() <= 0) {
-            return false;
-        }
-        for (Role role : roles) {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(userId);
-            userRole.setRoleId(role.getRoleId());
-            userRole.setCreateTime(new Date());
-            boolean rs = userRoleMapper.insert(userRole) > 0;
-            if (!rs) {
-                return false;
+    private List<Integer> getRoleIds(List<Role> roles) {
+        List<Integer> rs = new ArrayList<>();
+        if (roles != null && roles.size() > 0) {
+            for (Role role : roles) {
+                rs.add(role.getRoleId());
             }
         }
-        return true;
+        return rs;
     }
 
     @Override

@@ -7,7 +7,14 @@
         LEFT JOIN sys_role b ON a.role_id=b.role_id
         WHERE a.user_id IN
         <foreach collection="userIds" open="(" close=")" separator="," item="userId">
-        #{userId}
+            #{userId}
         </foreach>
     </select>
+
+    <insert id="insertBatch">
+        INSERT INTO sys_user_role(user_id,role_id,create_time) VALUES
+        <foreach collection="roleIds" item="roleId" separator=",">
+            (#{userId},#{roleId},SYSDATE())
+        </foreach>
+    </insert>
 </mapper>

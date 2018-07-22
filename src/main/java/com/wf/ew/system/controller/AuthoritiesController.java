@@ -107,29 +107,4 @@ public class AuthoritiesController extends BaseController {
         return JsonResult.error("删除失败");
     }
 
-    /**
-     * 给角色添加权限
-     **/
-    @RequiresPermissions("role:auth")
-    @ResponseBody
-    @RequestMapping("/addRoleAuth")
-    public JsonResult addRoleAuth(Integer roleId, Integer authId) {
-        if (authoritiesService.addRoleAuth(roleId, authId)) {
-            return JsonResult.ok();
-        }
-        return JsonResult.error();
-    }
-
-    /**
-     * 移除角色权限
-     **/
-    @RequiresPermissions("role:auth")
-    @ResponseBody
-    @RequestMapping("/deleteRoleAuth")
-    public JsonResult deleteRoleAuth(Integer roleId, Integer authId) {
-        if (authoritiesService.deleteRoleAuth(roleId, authId)) {
-            return JsonResult.ok();
-        }
-        return JsonResult.error();
-    }
 }
