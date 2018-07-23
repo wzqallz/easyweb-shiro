@@ -1,8 +1,8 @@
 /*
-SQLyog Ultimate v12.08 (64 bit)
-MySQL - 8.0.11 : Database - easyweb-shiro
+SQLyog 企业版 - MySQL GUI v8.14
+MySQL - 5.6.34-log : Database - easyweb-shiro
 *********************************************************************
-*/
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -12,7 +12,7 @@ MySQL - 8.0.11 : Database - easyweb-shiro
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`easyweb-shiro` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`easyweb-shiro` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
 USE `easyweb-shiro`;
 
@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS `sys_authorities`;
 CREATE TABLE `sys_authorities` (
   `authority_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '权限id',
   `authority_name` varchar(20) NOT NULL COMMENT '权限名称',
-  `authority` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '授权标识',
-  `menu_url` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '菜单url',
+  `authority` varchar(40) DEFAULT NULL COMMENT '授权标识',
+  `menu_url` varchar(40) DEFAULT NULL COMMENT '菜单url',
   `parent_id` int(11) NOT NULL DEFAULT '-1' COMMENT '父id',
   `is_menu` int(1) NOT NULL DEFAULT '0' COMMENT '0菜单，1按钮',
   `order_number` int(3) NOT NULL DEFAULT '0' COMMENT '排序号',
@@ -32,7 +32,7 @@ CREATE TABLE `sys_authorities` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`authority_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='权限表';
 
 /*Data for the table `sys_authorities` */
 
@@ -45,9 +45,9 @@ DROP TABLE IF EXISTS `sys_dictionary`;
 CREATE TABLE `sys_dictionary` (
   `dict_code` int(11) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
   `dict_name` varchar(50) NOT NULL COMMENT '字典名称',
-  `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '描述',
+  `description` varchar(100) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`dict_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='字典';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='字典';
 
 /*Data for the table `sys_dictionary` */
 
@@ -60,14 +60,14 @@ DROP TABLE IF EXISTS `sys_dictionarydata`;
 CREATE TABLE `sys_dictionarydata` (
   `dictdata_code` int(11) NOT NULL AUTO_INCREMENT COMMENT '字典项主键',
   `dict_code` int(11) NOT NULL COMMENT '字典主键',
-  `dictdata_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典项值',
+  `dictdata_name` varchar(40) NOT NULL COMMENT '字典项值',
   `is_delete` int(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
   `sort_number` int(1) NOT NULL COMMENT '排序',
-  `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '描述',
+  `description` varchar(100) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`dictdata_code`),
   KEY `FK_Reference_36` (`dict_code`),
   CONSTRAINT `sys_dictionarydata_ibfk_1` FOREIGN KEY (`dict_code`) REFERENCES `sys_dictionary` (`dict_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='字典项';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='字典项';
 
 /*Data for the table `sys_dictionarydata` */
 
@@ -80,15 +80,15 @@ DROP TABLE IF EXISTS `sys_login_record`;
 CREATE TABLE `sys_login_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `os_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '操作系统',
-  `device` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '设备名',
-  `browser_type` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '浏览器类型',
-  `ip_address` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'ip地址',
+  `os_name` varchar(40) DEFAULT NULL COMMENT '操作系统',
+  `device` varchar(40) DEFAULT NULL COMMENT '设备名',
+  `browser_type` varchar(40) DEFAULT NULL COMMENT '浏览器类型',
+  `ip_address` varchar(40) DEFAULT NULL COMMENT 'ip地址',
   `create_time` datetime NOT NULL COMMENT '登录时间',
   PRIMARY KEY (`id`),
   KEY `FK_sys_login_record_user` (`user_id`),
   CONSTRAINT `sys_login_record_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5453 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=5454 DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
 /*Data for the table `sys_login_record` */
 
@@ -108,7 +108,7 @@ CREATE TABLE `sys_person` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`person_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='人员表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='人员表';
 
 /*Data for the table `sys_person` */
 
@@ -124,7 +124,7 @@ CREATE TABLE `sys_role` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='角色表';
 
 /*Data for the table `sys_role` */
 
@@ -144,7 +144,7 @@ CREATE TABLE `sys_role_authorities` (
   KEY `FK_sys_role_permission_role` (`role_id`),
   CONSTRAINT `sys_role_authorities_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`),
   CONSTRAINT `sys_role_authorities_ibfk_3` FOREIGN KEY (`authority_id`) REFERENCES `sys_authorities` (`authority_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='角色权限关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='角色权限关联表';
 
 /*Data for the table `sys_role_authorities` */
 
@@ -171,7 +171,7 @@ CREATE TABLE `sys_user` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_account` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 /*Data for the table `sys_user` */
 
@@ -191,7 +191,7 @@ CREATE TABLE `sys_user_role` (
   KEY `FK_sys_user_role_role` (`role_id`),
   CONSTRAINT `sys_user_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`),
   CONSTRAINT `sys_user_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='用户角色关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='用户角色关联表';
 
 /*Data for the table `sys_user_role` */
 
