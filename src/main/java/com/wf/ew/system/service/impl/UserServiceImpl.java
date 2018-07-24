@@ -45,16 +45,18 @@ public class UserServiceImpl implements UserService {
         }
         Page<User> userPage = new Page<>(pageNum, pageSize);
         List<User> userList = userMapper.selectPage(userPage, wrapper.orderBy("create_time", true));
-        // 查询user的角色
-        List<UserRole> userRoles = userRoleMapper.selectByUserIds(getUserIds(userList));
-        for (User one : userList) {
-            List<Role> tempURs = new ArrayList<>();
-            for (UserRole ur : userRoles) {
-                if (one.getUserId().equals(ur.getUserId())) {
-                    tempURs.add(new Role(ur.getRoleId(), ur.getRoleName()));
+        if (userList.size() > 0) {
+            // 查询user的角色
+            List<UserRole> userRoles = userRoleMapper.selectByUserIds(getUserIds(userList));
+            for (User one : userList) {
+                List<Role> tempURs = new ArrayList<>();
+                for (UserRole ur : userRoles) {
+                    if (one.getUserId().equals(ur.getUserId())) {
+                        tempURs.add(new Role(ur.getRoleId(), ur.getRoleName()));
+                    }
                 }
+                one.setRoles(tempURs);
             }
-            one.setRoles(tempURs);
         }
         return new PageResult<>(userPage.getTotal(), userList);
     }
