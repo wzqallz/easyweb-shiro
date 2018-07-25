@@ -58,10 +58,9 @@ public class RoleServiceImpl implements RoleService {
         role.setRoleId(roleId);
         role.setIsDelete(isDelete);
         boolean rs = roleMapper.updateById(role) > 0;
-        if (rs) {  //删除角色的权限
-            if (roleAuthoritiesMapper.delete(new EntityWrapper().eq("role_id", roleId)) <= 0) {
-                throw new BusinessException("删除失败，请重试");
-            }
+        if (rs) {
+            //删除角色的权限
+            roleAuthoritiesMapper.delete(new EntityWrapper().eq("role_id", roleId));
         }
         return rs;
     }

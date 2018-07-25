@@ -15,6 +15,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,10 +27,13 @@ import java.util.Set;
  */
 public class UserRealm extends AuthorizingRealm {
     @Autowired
+    @Lazy
     private UserService userService;
     @Autowired
+    @Lazy
     private RoleService roleService;
     @Autowired
+    @Lazy
     private AuthoritiesService authoritiesService;
 
     @Override

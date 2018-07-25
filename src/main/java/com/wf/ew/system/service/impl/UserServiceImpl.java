@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         }
         Page<User> userPage = new Page<>(pageNum, pageSize);
         List<User> userList = userMapper.selectPage(userPage, wrapper.orderBy("create_time", true));
-        if (userList.size() > 0) {
+        if (userList != null && userList.size() > 0) {
             // 查询user的角色
             List<UserRole> userRoles = userRoleMapper.selectByUserIds(getUserIds(userList));
             for (User one : userList) {
