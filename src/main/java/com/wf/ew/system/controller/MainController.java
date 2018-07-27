@@ -67,8 +67,7 @@ public class MainController extends BaseController implements ErrorController {
         if (StringUtil.isBlank(username, password)) {
             return JsonResult.error("账号密码不能为空");
         }
-        CaptchaUtil captcha = new CaptchaUtil();
-        if (captcha == null || !captcha.ver(code.toLowerCase(), request)) {
+        if (!CaptchaUtil.ver(code, request)) {
             return JsonResult.error("验证码不正确");
         }
         try {
@@ -92,9 +91,8 @@ public class MainController extends BaseController implements ErrorController {
      */
     @RequestMapping("/assets/captcha")
     public void captcha(HttpServletRequest request, HttpServletResponse response) {
-        CaptchaUtil captcha = new CaptchaUtil(130, 38, 5);
         try {
-            captcha.out(request, response);
+            CaptchaUtil.out(request, response);
         } catch (IOException e) {
             e.printStackTrace();
         }
