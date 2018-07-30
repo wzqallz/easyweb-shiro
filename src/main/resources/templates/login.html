@@ -101,6 +101,7 @@
                 } else {
                     layer.closeAll('loading');
                     layer.msg(data.msg, {icon: 5});
+                    $('.login-captcha').trigger('click');
                 }
             }, 'JSON');
             return false;
