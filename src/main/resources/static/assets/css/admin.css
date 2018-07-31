@@ -137,6 +137,10 @@ html {
     padding-left: 50px; /** 导航字体位置 */
 }
 
+.layui-layout-admin .layui-side .layui-nav .layui-nav-item .layui-nav-child .layui-nav-child a {
+    padding-left: 70px;
+}
+
 .layui-layout-admin .layui-side .layui-nav .layui-nav-item > a {
     padding-top: 8px;
     padding-bottom: 8px;
@@ -297,7 +301,7 @@ html {
         overflow: hidden;
     }
 
-    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-itemed .layui-nav-child {
+    .layui-layout-admin.admin-nav-mini .layui-side .layui-nav .layui-nav-itemed > .layui-nav-child {
         display: block;
     }
 

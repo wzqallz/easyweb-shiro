@@ -125,8 +125,8 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping("/updatePsw")
     public JsonResult updatePsw(String oldPsw, String newPsw) {
-        if ("admin".equals(getLoginUserId())) {
-            return JsonResult.error("演示账号关闭该功能");
+        if ("admin".equals(getLoginUser().getUsername())) {
+            return JsonResult.error("演示账号admin关闭该功能");
         }
         String finalSecret = EndecryptUtil.encrytMd5(oldPsw, getLoginUserName(), 3);
         if (!finalSecret.equals(getLoginUser().getPassword())) {
