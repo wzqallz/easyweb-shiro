@@ -113,11 +113,16 @@ layui.define(['admin', 'layer', 'element'], function (exports) {
             var menuId = param.menuId;
             var url = param.url;
             var title = param.title;
-            index.loadView({
-                menuId: menuId,
-                menuPath: url,
-                menuName: title
+
+            Q.reg(menuId, function () {
+                index.loadView({
+                    menuId: menuId,
+                    menuPath: url,
+                    menuName: title
+                });
             });
+
+            Q.go(menuId);
         },
         // 关闭选项卡
         closeTab: function (menuId) {
